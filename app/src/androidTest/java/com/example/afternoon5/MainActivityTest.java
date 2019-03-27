@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class CreateNoteTest {
+public class MainActivityTest {
     @Test
     public void createNoteTest() {
         // Context of the app under test.

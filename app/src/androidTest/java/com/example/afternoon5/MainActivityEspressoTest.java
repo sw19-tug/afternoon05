@@ -3,6 +3,8 @@ package com.example.afternoon5;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.example.afternoon5.HelperClasses.Note;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +39,8 @@ public class MainActivityEspressoTest {
         activityTestRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                activityTestRule.getActivity().addListElement(new note_obj(TITLE, TEXT));
+                //activityTestRule.getActivity().addListElement(new note_obj(TITLE, TEXT));
+                DataProvider.getInstance().addNoteToNotes(new Note(TITLE, TEXT));
             }
         });
 

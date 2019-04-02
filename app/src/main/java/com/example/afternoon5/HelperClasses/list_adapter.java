@@ -1,4 +1,4 @@
-package com.example.afternoon5;
+package com.example.afternoon5.HelperClasses;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -7,16 +7,19 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.afternoon5.HelperClasses.Note;
+import com.example.afternoon5.R;
+
 import java.util.ArrayList;
 
 public class list_adapter extends BaseAdapter {
 
     private Activity context_1;
 
-    private ArrayList<note_obj> pairs;
+    private ArrayList<Note> pairs;
 
     public list_adapter(Activity context,
-                        ArrayList<note_obj> pairs) {
+                        ArrayList<Note> pairs) {
         context_1 = context;
         this.pairs = pairs;
     }
@@ -57,9 +60,9 @@ public class list_adapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.note_text.setText(pairs.get(position).text);
+        viewHolder.note_text.setText(pairs.get(position).getText());
 
-        viewHolder.note_title.setText(pairs.get(position).title);
+        viewHolder.note_title.setText(pairs.get(position).getTitle());
 
 
         return convertView;

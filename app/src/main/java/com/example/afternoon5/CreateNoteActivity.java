@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 
-public class CreateNote extends AppCompatActivity {
+public class CreateNoteActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

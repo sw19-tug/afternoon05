@@ -3,6 +3,8 @@ package com.example.afternoon5;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.example.afternoon5.HelperClasses.Note;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,8 +23,7 @@ public class MainActivityEspressoTest {
 
     @Test
     public void testListVisible() {
-        //Todo: nächste Zeile einkommentieren, wenn Liste mit ID node_list im xml- File vorhanden ist.
-        /*onView(withId(R.id.node_list)).check(matches(isDisplayed()));*/
+        onView(withId(R.id.node_list)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -31,20 +32,20 @@ public class MainActivityEspressoTest {
     }
 
     @Test
-    public void testListContent()  throws Throwable {
+    public void testListContent() throws Throwable {
         final String TITLE = "veryUniqueTestingStringOne";
         final String TEXT = "veryUniqueTestingStringTwo";
         // When.
         activityTestRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                activityTestRule.getActivity().addListElement(new note_obj(TITLE,TEXT));
-                onView(withText(TITLE)).check(matches(isDisplayed()));
-                onView(withText(TEXT)).check(matches(isDisplayed()));
+                //activityTestRule.getActivity().addListElement(new note_obj(TITLE, TEXT));
+                DataProvider.getInstance().addNoteToNotes(new Note(TITLE, TEXT));
             }
         });
+
+        onView(withText(TITLE)).check(matches(isDisplayed()));
+        onView(withText(TEXT)).check(matches(isDisplayed()));
     }
 
-
-
-    }
+}

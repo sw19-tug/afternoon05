@@ -51,4 +51,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+
+    public void refreshList() {
+    final ListView list = findViewById(R.id.node_list);
+    final list_adapter adapter = new list_adapter(this,DataProvider.getInstance().getNotes());
+    list.setAdapter(adapter);
+    }
 }

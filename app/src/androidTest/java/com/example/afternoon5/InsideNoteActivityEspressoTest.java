@@ -37,7 +37,7 @@ public class InsideNoteActivityEspressoTest {
             public void run() {
                 //activityTestRule.getActivity().addListElement(new Note(node_title, node_text));
                 DataProvider.getInstance().addNoteToNotes(new Note(node_title, node_text));
-
+                activityTestRule.getActivity().refreshList();
             }
         });
     }
@@ -45,8 +45,8 @@ public class InsideNoteActivityEspressoTest {
     @Test
     public void testNodeContentAndClickableOnMainActivity() throws Throwable {
 
-        final String node_title = "new_node_title";
-        final String node_text = "new_node_text";
+        final String node_title = "new_node_title_01";
+        final String node_text = "new_node_text_01";
 
         createNewListElement(node_title, node_text);
 
@@ -63,8 +63,8 @@ public class InsideNoteActivityEspressoTest {
 
     @Test
     public void testCheckContentAfterClickedNodeInMainActivity() throws Throwable {
-        final String node_title = "new_node_title";
-        final String node_text = "new_node_text";
+        final String node_title = "new_node_title_02";
+        final String node_text = "new_node_text_02";
 
         //Activity: MainActivity
 
@@ -88,8 +88,8 @@ public class InsideNoteActivityEspressoTest {
     @Test
     public void testEditNodeTitleCheckActivityAfterBack() throws Throwable {
 
-        final String node_title = "new_node_title";
-        final String node_text = "new_node_text";
+        final String node_title = "new_node_title_03";
+        final String node_text = "new_node_text_03";
 
         //Activity: MainActivity
 

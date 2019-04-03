@@ -51,6 +51,8 @@ public class list_adapter extends BaseAdapter {
                     .findViewById(R.id.note_title);
             viewHolder.note_text = (TextView) convertView
                     .findViewById(R.id.note_text);
+            viewHolder.note_tags = (TextView) convertView
+                    .findViewById(R.id.tagsTextView);
 
 
             convertView.setTag(viewHolder);
@@ -65,12 +67,23 @@ public class list_adapter extends BaseAdapter {
         viewHolder.note_title.setText(pairs.get(position).getTitle());
 
 
+        try{
+            viewHolder.note_tags.setText(pairs.get(position).getTags()!= null ? pairs.get(position).getTags().toString():"");
+        }
+        catch (Exception e)
+        {
+
+        }
+
+
+
         return convertView;
     }
 
     public class ViewHolder {
         public TextView note_title;
         public TextView note_text;
+        public TextView note_tags;
 
     }
 }

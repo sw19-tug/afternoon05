@@ -7,7 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
 
 import com.example.afternoon5.HelperClasses.Note;
@@ -22,16 +24,45 @@ public class CreateNoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_note);
+
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, DataProvider.getInstance().getAllTags());
+        MultiAutoCompleteTextView textView = findViewById(R.id.tagsTextView);
+        textView.setAdapter(adapter);
+        textView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+
     }
 
     public void createNote(View view) {
 
 
+
         String title = ((EditText)findViewById(R.id.editTitle)).getText().toString();
         String text = ((EditText)findViewById(R.id.editText)).getText().toString();
+        String tagString = ((EditText)findViewById(R.id.tagsTextView)).getText().toString();
 
-        DataProvider.getInstance().addNoteToNotes(new Note(title, text));
+        if(title.isEmpty() || text.isEmpty())
+        {
+            Toast toast = Toast.makeText(this, "Title or Text can't be empty", Toast.LENGTH_LONG);
+            toast.show();
+            return;
+        }
+
+        String[] tags =tagString.split(",");
+
+        Log.i("CREATE", tagString);
+
+
+        DataProvider.getInstance().addNoteToNotes(new Note(title, text, tags));
+
+
         DataProvider.getInstance().save(this);
+
+
+
+
 
         CharSequence save = "Note saved";
         int duration = Toast.LENGTH_SHORT;

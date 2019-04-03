@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
         list_adapter adapter = new list_adapter(this, DataProvider.getInstance().getNotes());
         list.setAdapter(adapter);
 
+
+
     }
 
     public void openCreateNote(View view) {

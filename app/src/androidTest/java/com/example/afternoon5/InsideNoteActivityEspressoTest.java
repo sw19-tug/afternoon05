@@ -2,8 +2,9 @@ package com.example.afternoon5;
 
 import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
+import com.example.afternoon5.HelperClasses.Note;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,7 +35,9 @@ public class InsideNoteActivityEspressoTest {
         activityTestRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                activityTestRule.getActivity().addListElement(new note_obj(node_title, node_text));
+                //activityTestRule.getActivity().addListElement(new Note(node_title, node_text));
+                DataProvider.getInstance().addNoteToNotes(new Note(node_title, node_text));
+
             }
         });
     }
@@ -55,7 +58,7 @@ public class InsideNoteActivityEspressoTest {
         onView(withText(node_title)).perform(click());
 
         //Check if Activity Changed after Click on Node Title
-        intended(hasComponent(ViewEditNote.class.getName()));
+        intended(hasComponent(ViewEditNoteActivity.class.getName()));
     }
 
     @Test

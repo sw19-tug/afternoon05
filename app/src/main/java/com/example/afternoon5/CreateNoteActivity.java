@@ -16,6 +16,7 @@ import com.example.afternoon5.HelperClasses.Note;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class CreateNoteActivity extends AppCompatActivity {
@@ -41,7 +42,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         String title = ((EditText)findViewById(R.id.editTitle)).getText().toString();
         String text = ((EditText)findViewById(R.id.editText)).getText().toString();
-        String tagString = ((EditText)findViewById(R.id.tagsTextView)).getText().toString();
+        String tagString = ((MultiAutoCompleteTextView)findViewById(R.id.tagsTextView)).getText().toString();
 
         if(title.isEmpty() || text.isEmpty())
         {
@@ -49,20 +50,15 @@ public class CreateNoteActivity extends AppCompatActivity {
             toast.show();
             return;
         }
-
+        tagString = tagString.replaceAll(" ", "");
+        if(tagString.endsWith(","))
+        {
+            tagString = tagString.substring(0, tagString.length()-1);
+        }
         String[] tags =tagString.split(",");
-
-        Log.i("CREATE", tagString);
-
-
         DataProvider.getInstance().addNoteToNotes(new Note(title, text, tags));
 
-
         DataProvider.getInstance().save(this);
-
-
-
-
 
         CharSequence save = "Note saved";
         int duration = Toast.LENGTH_SHORT;

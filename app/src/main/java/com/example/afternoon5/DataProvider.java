@@ -2,13 +2,11 @@ package com.example.afternoon5;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.example.afternoon5.HelperClasses.Note;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 class DataProvider {
@@ -19,13 +17,13 @@ class DataProvider {
     }
 
     private ArrayList<Note>notes;
-    private ArrayList<String> allTags;
+
 
 
     private DataProvider() {
 
         notes = new ArrayList<>();
-        allTags = new ArrayList<>();
+
 
     }
 
@@ -42,14 +40,6 @@ class DataProvider {
         {
             this.notes = notes;
         }
-        String jsonTags = myprefs.getString("Tags", null);
-        ArrayList<String> tags= (ArrayList<String>) gson.fromJson(jsonTags,
-                new TypeToken<ArrayList<String>>() {
-                }.getType());
-        if (tags != null)
-        {
-            this.allTags = tags;
-        }
 
 
 
@@ -64,10 +54,10 @@ class DataProvider {
         Gson gson = new Gson();
 
         String json = gson.toJson(notes);
-        String jsonTags = gson.toJson(allTags);
 
         myeditor.putString("Notes",json);
-        myeditor.putString("Tags", jsonTags);
+
+
         myeditor.commit();
 
     }
@@ -85,11 +75,21 @@ class DataProvider {
         notes.add(note);
     }
 
-    public ArrayList<String> getAllTags() {
-        return allTags;
+    public ArrayList<String> getAllTags()
+    {
+        ArrayList<String> tags = new ArrayList<>();
+        for (Note note : notes)
+        {
+            for(String s : note.getTags())
+            {
+                if(!tags.contains(s))
+                {
+                    tags.add(s);
+                }
+            }
+        }
+        return tags;
     }
 
-    public void setAllTags(ArrayList<String> allTags) {
-        this.allTags = allTags;
-    }
+
 }

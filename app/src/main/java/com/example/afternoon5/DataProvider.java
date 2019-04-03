@@ -63,10 +63,7 @@ class DataProvider {
         myprefs = context.getSharedPreferences("com.example.afternoon5", context.MODE_PRIVATE);
         SharedPreferences.Editor myeditor = myprefs.edit();
         Gson gson = new Gson();
-
-
         String json = gson.toJson(notes);
-
         myeditor.putString("Notes",json);
         myeditor.commit();
 

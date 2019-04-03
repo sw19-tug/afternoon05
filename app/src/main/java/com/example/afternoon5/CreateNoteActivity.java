@@ -13,7 +13,9 @@ import android.widget.Toast;
 import com.example.afternoon5.HelperClasses.Note;
 import com.google.gson.Gson;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class CreateNoteActivity extends AppCompatActivity {
@@ -29,8 +31,11 @@ public class CreateNoteActivity extends AppCompatActivity {
 
         String title = ((EditText)findViewById(R.id.editTitle)).getText().toString();
         String text = ((EditText)findViewById(R.id.editText)).getText().toString();
-
-        DataProvider.getInstance().addNoteToNotes(new Note(title, text));
+        //LocalDate date= ((EditText)findViewById(R.id.editText)).getText().toString();
+        //LocalDateTime created_today = new LocalDateTime();
+        Date today = new Date();
+        //today.getTime();
+        DataProvider.getInstance().addNoteToNotes(new Note(title, text, today));
         DataProvider.getInstance().save(this);
 
         CharSequence save = "Note saved";

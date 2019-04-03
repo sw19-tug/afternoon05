@@ -24,4 +24,14 @@
         android:onClick="openCreateNote"
         app:srcCompat="@android:drawable/ic_input_add" />
 
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:entries="@array/sort_options"
+        android:prompt="@string/sort_options_prompt"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
+
 </android.support.constraint.ConstraintLayout>

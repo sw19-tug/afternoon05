@@ -8,28 +8,35 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class ViewEditNote extends AppCompatActivity {
-    private static final String EXTRA_MESSAGE ="extra";
-    private static note_obj objectToEdit;
+import com.example.afternoon5.HelperClasses.Note;
 
-    static void callIntentwithExtra(Context cx, note_obj object)
+public class ViewEditNoteActivity extends AppCompatActivity {
+    private static final String EXTRA_MESSAGE ="extra";
+    private static Note objectToEdit;
+    private int position;
+
+/*    static void callIntentwithExtra(Context cx, Note object)
     {
-        Intent intent = new Intent(cx, ViewEditNote.class);
+        Intent intent = new Intent(cx, ViewEditNoteActivity.class);
         //intent.putExtra(EXTRA_MESSAGE, object);
         objectToEdit = object;
         cx.startActivity(intent);
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_edit_note);
 
+        position = getIntent().getIntExtra("position", 0);
+        objectToEdit = DataProvider.getInstance().getNotes().get(position);
+
+
         final TextView editNote = (TextView) this.findViewById(R.id.editNote);
-        editNote.setText(objectToEdit.text);
+        editNote.setText(objectToEdit.getText());
 
         final TextView Title = (TextView) this.findViewById(R.id.Title);
-        Title.setText(objectToEdit.title);
+        Title.setText(objectToEdit.getTitle());
 
         Button btn = this.findViewById(R.id.button_safe);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -48,8 +55,11 @@ public class ViewEditNote extends AppCompatActivity {
     {
         final TextView editNote = (TextView) this.findViewById(R.id.editNote);
         final TextView Title = (TextView) this.findViewById(R.id.Title);
-        objectToEdit.text = editNote.getText().toString();
-        objectToEdit.title = Title.getText().toString();
-        MainActivity.callIntentwithObjectToPushIntoList(ViewEditNote.this,objectToEdit);
+        DataProvider.getInstance().getNotes().get(position).setText(editNote.getText().toString());
+        DataProvider.getInstance().getNotes().get(position).setTitle(Title.getText().toString());
+        DataProvider.getInstance().save(this);
+
+        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        startActivity(intent);
     }
 }

@@ -2,8 +2,9 @@ package com.example.afternoon5;
 
 import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
+import com.example.afternoon5.HelperClasses.Note;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,7 +35,9 @@ public class InsideNoteActivityEspressoTest {
         activityTestRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                activityTestRule.getActivity().addListElement(new note_obj(node_title, node_text));
+                //activityTestRule.getActivity().addListElement(new Note(node_title, node_text));
+                DataProvider.getInstance().addNoteToNotes(new Note(node_title, node_text));
+                activityTestRule.getActivity().refreshList();
             }
         });
     }
@@ -42,8 +45,8 @@ public class InsideNoteActivityEspressoTest {
     @Test
     public void testNodeContentAndClickableOnMainActivity() throws Throwable {
 
-        final String node_title = "new_node_title";
-        final String node_text = "new_node_text";
+        final String node_title = "new_node_title_01";
+        final String node_text = "new_node_text_01";
 
         createNewListElement(node_title, node_text);
 
@@ -55,13 +58,13 @@ public class InsideNoteActivityEspressoTest {
         onView(withText(node_title)).perform(click());
 
         //Check if Activity Changed after Click on Node Title
-        intended(hasComponent(ViewEditNote.class.getName()));
+        intended(hasComponent(ViewEditNoteActivity.class.getName()));
     }
 
     @Test
     public void testCheckContentAfterClickedNodeInMainActivity() throws Throwable {
-        final String node_title = "new_node_title";
-        final String node_text = "new_node_text";
+        final String node_title = "new_node_title_02";
+        final String node_text = "new_node_text_02";
 
         //Activity: MainActivity
 
@@ -85,8 +88,8 @@ public class InsideNoteActivityEspressoTest {
     @Test
     public void testEditNodeTitleCheckActivityAfterBack() throws Throwable {
 
-        final String node_title = "new_node_title";
-        final String node_text = "new_node_text";
+        final String node_title = "new_node_title_03";
+        final String node_text = "new_node_text_03";
 
         //Activity: MainActivity
 

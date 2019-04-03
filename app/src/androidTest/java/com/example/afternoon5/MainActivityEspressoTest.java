@@ -1,5 +1,6 @@
 package com.example.afternoon5;
 
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -14,6 +15,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -41,11 +43,15 @@ public class MainActivityEspressoTest {
             public void run() {
                 //activityTestRule.getActivity().addListElement(new note_obj(TITLE, TEXT));
                 DataProvider.getInstance().addNoteToNotes(new Note(TITLE, TEXT));
+
             }
         });
+        
 
+        Thread.sleep(10000);
         onView(withText(TITLE)).check(matches(isDisplayed()));
         onView(withText(TEXT)).check(matches(isDisplayed()));
+
     }
 
 }

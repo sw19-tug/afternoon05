@@ -1,8 +1,9 @@
 package com.example.afternoon5;
 
+import android.support.test.espresso.intent.Intents;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.widget.EditText;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,18 +12,20 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 
 @RunWith(AndroidJUnit4.class)
 public class InsideNoteActivityEspressoTest {
     @Rule
-    public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public IntentsTestRule<MainActivity> activityTestRule = new IntentsTestRule<>(MainActivity.class);
 
 
     public void createNewListElement(final String node_title, final String node_text) throws Throwable
@@ -48,9 +51,11 @@ public class InsideNoteActivityEspressoTest {
         onView(withText(node_title)).check(matches(isDisplayed()));
         onView(withText(node_text)).check(matches(isDisplayed()));
 
-
         //Check if Node Clickable
-        onView(withText(node_title)).check(matches(isClickable()));
+        onView(withText(node_title)).perform(click());
+
+        //Check if Activity Changed after Click on Node Title
+        intended(hasComponent(ViewEditNote.class.getName()));
     }
 
     @Test
@@ -95,7 +100,7 @@ public class InsideNoteActivityEspressoTest {
         final String node_title_new = "new_node_title_changed";
 
         //Change Title of Node
-        onView(withId(R.id.Title)).perform(typeText(node_title_new));
+        onView(withId(R.id.Title)).perform(replaceText(node_title_new));
 
         //Go Back to Activity Main
         pressBack();

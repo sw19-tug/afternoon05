@@ -31,7 +31,7 @@ public class ViewEditNote extends AppCompatActivity {
         final TextView Title = (TextView) this.findViewById(R.id.Title);
         Title.setText(objectToEdit.title);
 
-        Button btn = this.findViewById(R.id.button);
+        Button btn = this.findViewById(R.id.button_safe);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 safeAndCallMainActivity();

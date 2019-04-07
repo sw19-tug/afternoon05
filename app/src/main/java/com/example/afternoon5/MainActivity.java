@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         list_adapter adapter = new list_adapter(this, DataProvider.getInstance().getNotes());
         list.setAdapter(adapter);
 
+
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent,
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
 

@@ -69,13 +69,7 @@ public class list_adapter extends BaseAdapter {
 
         viewHolder.note_title.setText(pairs.get(position).getTitle());
 
-        ArrayList<String> tags = pairs.get(position).getTags();
-        String tagsAsString = "";
-        for (String s : tags)
-        {
-            tagsAsString = tagsAsString + s + " ";
-        }
-        viewHolder.note_tags.setText(tagsAsString);
+        viewHolder.note_tags.setText(pairs.get(position).getTagsAsString());
 
 
         return convertView;

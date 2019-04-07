@@ -4,19 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="#d9d9db"
+    android:padding="10dp">
 
     <ListView
         android:id="@+id/node_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/createNoteButton"
         android:layout_width="80dp"
         android:layout_height="67dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:clickable="true"
         app:backgroundTint="@color/design_default_color_primary_dark"
         app:layout_constraintBottom_toBottomOf="parent"

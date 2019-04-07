@@ -1,14 +1,24 @@
 package com.example.afternoon5;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
+
 
 import com.example.afternoon5.HelperClasses.Note;
 
@@ -27,6 +37,12 @@ public class ViewEditNoteActivity extends AppCompatActivity {
         cx.startActivity(intent);
     }*/
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.edit_menu, menu);
+        return true;
+    }
 
 
     @Override
@@ -88,4 +104,53 @@ public class ViewEditNoteActivity extends AppCompatActivity {
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_delete) {
+
+            DialogFragment deleteNoteDialogFragment = new DeleteNoteDialogFragment();
+            deleteNoteDialogFragment.show(getSupportFragmentManager(), "DeleteNoteDialogFragment");
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    static public class DeleteNoteDialogFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the Builder class for convenient dialog construction
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Do you want to delete this Note?")
+                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogInterface, int id) {
+                            // FIRE ZE MISSILES!
+                            Dialog dialog  = (Dialog) dialogInterface;
+                            Context context = dialog.getContext();
+                            DataProvider.getInstance().getNotes().remove(objectToEdit);
+                            DataProvider.getInstance().save(context);
+                            Intent intent = new Intent(context, MainActivity.class);
+                            startActivity(intent);
+
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User cancelled the dialog
+                        }
+                    });
+            // Create the AlertDialog object and return it
+            return builder.create();
+        }
+    }
+
 }
+

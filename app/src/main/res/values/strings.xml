@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">afternoon5</string>
+    <string name="app_name">Notes</string>
+    <string name="delete_icon">Delete</string>
 </resources>

@@ -17,7 +17,22 @@ public class Note {
     public Note(String title, String text, String[] tags) {
         this.title = title;
         this.text = text;
-        this.tags = new ArrayList<>(Arrays.asList(tags));
+        this.tags = removeDuplicates(new ArrayList<>(Arrays.asList(tags)));
+    }
+
+    public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list)
+    {
+
+        ArrayList<T> newList = new ArrayList<T>();
+        for (T element : list) {
+
+            if (!newList.contains(element)) {
+                newList.add(element);
+            }
+        }
+
+        return newList;
+
     }
 
 
@@ -41,10 +56,21 @@ public class Note {
         return tags;
     }
 
+    public String getTagsAsString()
+    {
+        String tagsAsString = "";
+        for (String s : tags)
+        {
+            tagsAsString = tagsAsString + s + ", ";
+        }
+        return tagsAsString;
+    }
 
 
-    public void setTags(ArrayList<String> tags) {
-        this.tags = tags;
+
+
+    public void setTags(String[] tags) {
+        this.tags = removeDuplicates(new ArrayList<>(Arrays.asList(tags)));
     }
 
 

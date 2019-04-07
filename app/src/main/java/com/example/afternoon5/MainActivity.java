@@ -30,22 +30,6 @@ public class MainActivity extends AppCompatActivity {
         final list_adapter adapter = new list_adapter(this, DataProvider.getInstance().getNotes());
         list.setAdapter(adapter);
 
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-
-                Note note = (Note)parent.getItemAtPosition(position);
-
-                //note.getText();
-                DataProvider.getInstance().getNotes().remove(note);
-                adapter.notifyDataSetChanged();
-                DataProvider.getInstance().save(getBaseContext());
-            }
-        });
-
-
-
     }
 
     public void openCreateNote(View view) {

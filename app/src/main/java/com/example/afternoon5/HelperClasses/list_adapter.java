@@ -1,16 +1,19 @@
 package com.example.afternoon5.HelperClasses;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 
 import com.example.afternoon5.HelperClasses.Note;
 import com.example.afternoon5.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class list_adapter extends BaseAdapter {
 
@@ -51,6 +54,8 @@ public class list_adapter extends BaseAdapter {
                     .findViewById(R.id.note_title);
             viewHolder.note_text = (TextView) convertView
                     .findViewById(R.id.note_text);
+            viewHolder.note_tags = (TextView) convertView
+                    .findViewById(R.id.note_tags);
 
 
             convertView.setTag(viewHolder);
@@ -64,6 +69,8 @@ public class list_adapter extends BaseAdapter {
 
         viewHolder.note_title.setText(pairs.get(position).getTitle());
 
+        viewHolder.note_tags.setText(pairs.get(position).getTagsAsString());
+
 
         return convertView;
     }
@@ -71,6 +78,7 @@ public class list_adapter extends BaseAdapter {
     public class ViewHolder {
         public TextView note_title;
         public TextView note_text;
+        public TextView note_tags;
 
     }
 }

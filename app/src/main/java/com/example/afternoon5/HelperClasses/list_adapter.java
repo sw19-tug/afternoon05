@@ -34,7 +34,7 @@ public class list_adapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return pairs.get(position);
     }
 
     @Override

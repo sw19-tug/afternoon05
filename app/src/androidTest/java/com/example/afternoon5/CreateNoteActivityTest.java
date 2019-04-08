@@ -27,9 +27,11 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -57,7 +59,7 @@ public class CreateNoteActivityTest {
                 allOf(withId(R.id.editTitle),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(android.R.id.content),
+                                        withClassName(is("android.support.constraint.ConstraintLayout")),
                                         0),
                                 0),
                         isDisplayed()));
@@ -67,7 +69,7 @@ public class CreateNoteActivityTest {
                 allOf(withId(R.id.editTitle),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(android.R.id.content),
+                                        withClassName(is("android.support.constraint.ConstraintLayout")),
                                         0),
                                 0),
                         isDisplayed()));
@@ -77,16 +79,23 @@ public class CreateNoteActivityTest {
                 allOf(withId(R.id.editText),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(android.R.id.content),
+                                        withClassName(is("android.support.constraint.ConstraintLayout")),
                                         0),
                                 1),
                         isDisplayed()));
         appCompatEditText3.perform(replaceText("test"), closeSoftKeyboard());
 
+
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.SaveNoteButton), withText("Create Note"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
                         isDisplayed()));
         appCompatButton.perform(click());
+
 
         ViewInteraction appCompatList = onView(
                 allOf(withId(R.id.node_list),

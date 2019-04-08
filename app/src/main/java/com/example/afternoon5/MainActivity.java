@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -34,18 +35,14 @@ public class MainActivity extends AppCompatActivity {
 
         final list_adapter adapter = new list_adapter(this, DataProvider.getInstance().getNotes());
         list.setAdapter(adapter);
+        list.setItemsCanFocus(false);
+        list.setOnItemClickListener((parent, view, position, id) -> {
+            //ViewEditNoteActivity.callIntentwithExtra(MainActivity.this, DataProvider.getInstance().getNotes().get(position));
+            Log.i("MAIN", "FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
+            Intent intent = new Intent(getBaseContext(), ViewEditNoteActivity.class);
+            intent.putExtra("position" ,position);
+            startActivity(intent);
 
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent,
-                                    View view, int position, long id) {
-                //ViewEditNoteActivity.callIntentwithExtra(MainActivity.this, DataProvider.getInstance().getNotes().get(position));
-                Intent intent = new Intent(getBaseContext(), ViewEditNoteActivity.class);
-                intent.putExtra("position" ,position);
-                startActivity(intent);
-
-            }
         });
 
     }

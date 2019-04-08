@@ -60,7 +60,7 @@ public class EditTagTest {
                 allOf(withId(R.id.editTitle),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(android.R.id.content),
+                                        withClassName(is("android.support.constraint.ConstraintLayout")),
                                         0),
                                 0),
                         isDisplayed()));
@@ -70,7 +70,7 @@ public class EditTagTest {
                 allOf(withId(R.id.editText),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(android.R.id.content),
+                                        withClassName(is("android.support.constraint.ConstraintLayout")),
                                         0),
                                 1),
                         isDisplayed()));
@@ -80,11 +80,13 @@ public class EditTagTest {
                 allOf(withId(R.id.tagsTextView),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(android.R.id.content),
+                                        withClassName(is("android.support.constraint.ConstraintLayout")),
                                         0),
-                                3),
+                                2),
                         isDisplayed()));
         appCompatMultiAutoCompleteTextView.perform(replaceText("test"), closeSoftKeyboard());
+
+
 
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.SaveNoteButton), withText("Create Note"),
@@ -92,60 +94,51 @@ public class EditTagTest {
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                2),
+                                1),
                         isDisplayed()));
         appCompatButton.perform(click());
 
-        DataInteraction linearLayoutCompat = onData(anything())
+        DataInteraction constraintLayout = onData(anything())
                 .inAdapterView(allOf(withId(R.id.node_list),
                         childAtPosition(
                                 withClassName(is("android.support.constraint.ConstraintLayout")),
                                 0)))
                 .atPosition(0);
-        linearLayoutCompat.perform(click());
+        constraintLayout.perform(click());
 
-
-        ViewInteraction appCompatMultiAutoCompleteTextView4 = onView(
+        ViewInteraction appCompatMultiAutoCompleteTextView2 = onView(
                 allOf(withId(R.id.editTagsTextView), withText("test, "),
                         childAtPosition(
-                                allOf(withId(R.id.relativeLayout),
-                                        childAtPosition(
-                                                withId(android.R.id.content),
-                                                0)),
-                                2),
-                        isDisplayed()));
-        appCompatMultiAutoCompleteTextView4.perform(replaceText("testtest"));
-
-        ViewInteraction appCompatMultiAutoCompleteTextView5 = onView(
-                allOf(withId(R.id.editTagsTextView), withText("testtest"),
-                        childAtPosition(
-                                allOf(withId(R.id.relativeLayout),
-                                        childAtPosition(
-                                                withId(android.R.id.content),
-                                                0)),
-                                2),
-                        isDisplayed()));
-        appCompatMultiAutoCompleteTextView5.perform(closeSoftKeyboard());
-
-        ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.button_safe), withText("safe"),
-                        childAtPosition(
-                                allOf(withId(R.id.relativeLayout),
-                                        childAtPosition(
-                                                withId(android.R.id.content),
-                                                0)),
-                                3),
-                        isDisplayed()));
-        appCompatButton2.perform(click());
-
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.note_tags), withText("testtest, "),
-                        childAtPosition(
                                 childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.support.v7.widget.LinearLayoutCompat.class),
+                                        withClassName(is("android.support.constraint.ConstraintLayout")),
                                         0),
                                 2),
                         isDisplayed()));
+        appCompatMultiAutoCompleteTextView2.perform(replaceText("testtest "));
+
+        ViewInteraction appCompatMultiAutoCompleteTextView3 = onView(
+                allOf(withId(R.id.editTagsTextView), withText("testtest "),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.support.constraint.ConstraintLayout")),
+                                        0),
+                                2),
+                        isDisplayed()));
+        appCompatMultiAutoCompleteTextView3.perform(closeSoftKeyboard());
+
+
+        ViewInteraction appCompatButton2 = onView(
+                allOf(withId(R.id.button_safe), withText("Save"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        appCompatButton2.perform(click());
+
+        ViewInteraction textView = onView(withId(R.id.note_tags));
+
         textView.check(matches(withText("testtest, ")));
     }
 

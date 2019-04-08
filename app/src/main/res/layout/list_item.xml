@@ -12,13 +12,13 @@
 
     <TextView
 
+
         android:id="@+id/note_title"
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="5dp"
         android:text="Hello World!"
-
         android:textSize="20sp"
         android:textStyle="bold"
 
@@ -33,6 +33,16 @@
         android:text="Hello World!"
         app:layout_constraintStart_toStartOf="@id/note_title"
         app:layout_constraintTop_toBottomOf="@id/note_title" />
+  
+      <TextView
+        android:id="@+id/note_tags"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="5sp"
+        android:text="Hello World!"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="@+id/note_text"
+        app:layout_constraintTop_toBottomOf="@+id/note_text" />
 
     <CheckBox
         android:id="@+id/checkBox2"

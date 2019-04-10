@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+        <item android:id="@+id/file"
+            android:title="menue außen" >
+            <!-- "file" submenu -->
+            <menu>
+                <item android:id="@+id/sort_alphabetical"
+                    android:title="menüdrinnen" />
+                <item android:id="@+id/sort_creation_date"
+                    android:title="menüdrinnen2" />
+            </menu>
+        </item>
+
+    <!--item
+        android:id="@+id/spinner2"
+
+        android:icon = "@drawable/ic_launcher_background"
+        android:title="der_titel"
+        app:showAsAction="never"/>
+    <Spinner
+        android:id="@+id/spinner1"
+        app:showAsAction="always"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:entries="@array/sort_options"
+        android:prompt="@string/sort_options_prompt"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp" /-->
+
+    <!--android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimaryDark"
+        android:minHeight="?attr/actionBarSize"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        >
+
+        <Spinner
+            android:id="@+id/spinner_nav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </android.support.v7.widget.Toolbar-->
+
+    <!-- Settings, should always be in the overflow -->
+    <!--item android:id="@+id/action_settings"
+        android:title="sorting placeholder"
+        app:showAsAction="never">
+
+        <Spinner
+            android:id="@+id/spinner1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:entries="@array/sort_options"
+            android:prompt="@string/sort_options_prompt"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:layout_editor_absoluteX="0dp" />
+    </item-->
+
+</menu>

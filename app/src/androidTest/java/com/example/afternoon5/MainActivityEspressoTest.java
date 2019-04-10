@@ -9,6 +9,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Date;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -40,7 +42,7 @@ public class MainActivityEspressoTest {
             @Override
             public void run() {
                 //activityTestRule.getActivity().addListElement(new note_obj(TITLE, TEXT));
-                DataProvider.getInstance().addNoteToNotes(new Note(TITLE, TEXT));
+                DataProvider.getInstance().addNoteToNotes(new Note(TITLE, TEXT, new Date()));
             }
         });
 

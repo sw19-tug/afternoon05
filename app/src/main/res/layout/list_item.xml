@@ -48,6 +48,7 @@
         style="?android:attr/starStyle"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:visibility="gone"
         app:layout_constraintBaseline_toBaselineOf="@id/note_title"
         app:layout_constraintStart_toEndOf="@id/note_title" />
 

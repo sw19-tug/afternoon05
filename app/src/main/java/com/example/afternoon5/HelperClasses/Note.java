@@ -1,11 +1,15 @@
 package com.example.afternoon5.HelperClasses;
 
+import android.view.View;
+import android.widget.CheckBox;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Note {
     private String title;
     private String text;
+    private Boolean pinned;
 
     private ArrayList<String> tags;
 
@@ -13,6 +17,7 @@ public class Note {
         this.title = title;
         this.text = text;
         this.tags = new ArrayList<>();
+        this.pinned = false;
     }
     public Note(String title, String text, String[] tags) {
         this.title = title;
@@ -73,5 +78,10 @@ public class Note {
         this.tags = removeDuplicates(new ArrayList<>(Arrays.asList(tags)));
     }
 
-
+    public void onCheckboxClicked(View view)
+    {
+        boolean checked = ((CheckBox) view).isChecked();
+        if (checked)
+            this.pinned = true;
+    }
 }

@@ -2,6 +2,7 @@ package com.example.afternoon5;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,14 +37,36 @@ public class MainActivity extends AppCompatActivity {
         final list_adapter adapter = new list_adapter(this, DataProvider.getInstance().getNotes());
         list.setAdapter(adapter);
         list.setItemsCanFocus(false);
+        list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                           int pos, long id) {
+                // TODO Auto-generated method stub
+                Log.i("MAIN", "TEST");
+
+                for (int i = 0; i < list.getCount(); i++)
+                {
+                    // Log.i("MAIN", "DEBUG: " + list.getAdapter().get);
+                    // list.getAdapter().getView(i, parent, null).findViewById(R.id.export_checkbox).setVisibility(View.VISIBLE);
+                    View view1  = list.getChildAt(i);
+                    view1.findViewById(R.id.export_checkbox).setVisibility(View.VISIBLE);
+                }
+                return true;
+            }
+        });
+
+
+
         list.setOnItemClickListener((parent, view, position, id) -> {
             //ViewEditNoteActivity.callIntentwithExtra(MainActivity.this, DataProvider.getInstance().getNotes().get(position));
-            Log.i("MAIN", "FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
+
             Intent intent = new Intent(getBaseContext(), ViewEditNoteActivity.class);
             intent.putExtra("position" ,position);
             startActivity(intent);
 
         });
+
 
     }
 

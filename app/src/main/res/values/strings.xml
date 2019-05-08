@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">NOTE</string>
     <string name="delete_icon">Delete</string>
+    <string name="export_icon">Export</string>
 </resources>

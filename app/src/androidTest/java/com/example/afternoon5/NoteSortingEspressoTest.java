@@ -8,8 +8,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -35,9 +37,8 @@ public class NoteSortingEspressoTest {
     private final String TITLE = "veryUniqueTestingStringOne";
     private final String TEXT = "veryUniqueTestingStringTwo";
 
-    private final String SPINNER_SELECTABLE_SORT_BY_TITLE = "Sort by Title";
-    private final String SPINNER_SELECTABLE_SORT_BY_CREATION_DATE = "Sort by Creation Date";
-    private final String SPINNER_SELECTABLE_UNSORTED = "Unsorted";
+    private final int SPINNER_SELECTABLE_SORT_BY_TITLE = R.id.sort_alphabetical;
+    private final int SPINNER_SELECTABLE_SORT_BY_CREATION_DATE = R.id.sort_creation_date;
 
     private void addTestNotes(String title, String text) {
         onView(withId(R.id.createNoteButton)).perform(click());
@@ -47,30 +48,19 @@ public class NoteSortingEspressoTest {
         onView(withId(R.id.SaveNoteButton)).check(matches(isClickable())).perform(click());
     }
 
-    private void setSpinnerToMode(String spinnermode) {
-        onView(withId(R.id.spinner1)).perform(click());
-        Espresso.onData(allOf(is(instanceOf(String.class)), is(spinnermode))).perform(click());
-        onView(withId(R.id.spinner1)).check(matches(withSpinnerText(containsString(spinnermode))));
+    private void setSortMode(int SelectableId) {
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withId(R.id.checkable_sort)).perform(click());
+        onView(withId(SelectableId)).perform(click());
     }
 
     @Test
-    public void testSpinnerVisible() throws InterruptedException {
-        onView(withId(R.id.spinner1)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void allValuesSelectable() throws InterruptedException {
-        onView(withId(R.id.spinner1)).perform(click());
-        Espresso.onData(allOf(is(instanceOf(String.class)), is(SPINNER_SELECTABLE_SORT_BY_TITLE))).perform(click());
-        onView(withId(R.id.spinner1)).check(matches(withSpinnerText(containsString(SPINNER_SELECTABLE_SORT_BY_TITLE))));
-
-        onView(withId(R.id.spinner1)).perform(click());
-        Espresso.onData(allOf(is(instanceOf(String.class)), is(SPINNER_SELECTABLE_SORT_BY_CREATION_DATE))).perform(click());
-        onView(withId(R.id.spinner1)).check(matches(withSpinnerText(containsString(SPINNER_SELECTABLE_SORT_BY_CREATION_DATE))));
-
-        onView(withId(R.id.spinner1)).perform(click());
-        Espresso.onData(allOf(is(instanceOf(String.class)), is(SPINNER_SELECTABLE_UNSORTED))).perform(click());
-        onView(withId(R.id.spinner1)).check(matches(withSpinnerText(containsString(SPINNER_SELECTABLE_UNSORTED))));
+    public void testMenuIsDisplayed() throws InterruptedException {
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        onView(withId(R.id.checkable_sort)).check(matches(isDisplayed()));
+        onView(withId(R.id.checkable_sort)).perform(click());
+        onView(withId(SPINNER_SELECTABLE_SORT_BY_TITLE)).check(matches(isDisplayed()));
+        onView(withId(SPINNER_SELECTABLE_SORT_BY_CREATION_DATE)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -80,7 +70,7 @@ public class NoteSortingEspressoTest {
         addTestNotes("B" + TITLE, "B" + TEXT);
         addTestNotes("A" + TITLE, "A" + TEXT);
 
-        setSpinnerToMode(SPINNER_SELECTABLE_SORT_BY_TITLE);
+        setSortMode(SPINNER_SELECTABLE_SORT_BY_TITLE);
 
         //Check sorting order
         onView(withText("A" + TITLE)).perform(scrollTo()).check(isAbove(withText("B" + TITLE)));
@@ -90,14 +80,13 @@ public class NoteSortingEspressoTest {
 
     @Test
     public void testCreationDatelSortingFunction() throws InterruptedException {
-        //Todo: clear notes list before starting with test (not implemented yet and not in scope of this feature)
-        setSpinnerToMode(SPINNER_SELECTABLE_SORT_BY_TITLE);
+        setSortMode(SPINNER_SELECTABLE_SORT_BY_TITLE);
 
         addTestNotes("F" + TITLE, "F" + TEXT);
         addTestNotes("E" + TITLE, "E" + TEXT);
         addTestNotes("D" + TITLE, "D" + TEXT);
 
-        setSpinnerToMode(SPINNER_SELECTABLE_SORT_BY_CREATION_DATE);
+        setSortMode(SPINNER_SELECTABLE_SORT_BY_CREATION_DATE);
 
         //Check sorting order
         onView(withText("F" + TITLE)).perform(scrollTo()).check(isAbove(withText("E" + TITLE)));
@@ -107,7 +96,7 @@ public class NoteSortingEspressoTest {
 
     @Test
     public void testAddNoteCreationDatedMode() {
-        setSpinnerToMode(SPINNER_SELECTABLE_UNSORTED);
+        setSortMode(SPINNER_SELECTABLE_SORT_BY_CREATION_DATE);
 
         addTestNotes("I" + TITLE, "I" + TEXT);
         addTestNotes("H" + TITLE, "H" + TEXT);
@@ -121,7 +110,7 @@ public class NoteSortingEspressoTest {
 
     @Test
     public void testAddNoteSortByTitleMode() {
-        setSpinnerToMode(SPINNER_SELECTABLE_SORT_BY_TITLE);
+        setSortMode(SPINNER_SELECTABLE_SORT_BY_TITLE);
 
         addTestNotes("L" + TITLE, TEXT);
         addTestNotes("K" + TITLE, TEXT);

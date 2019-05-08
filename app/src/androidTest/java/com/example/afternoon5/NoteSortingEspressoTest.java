@@ -1,5 +1,7 @@
 package com.example.afternoon5;
 
+import android.content.Context;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -50,8 +52,19 @@ public class NoteSortingEspressoTest {
 
     private void setSortMode(int SelectableId) {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        onView(withId(R.id.checkable_sort)).perform(click());
-        onView(withId(SelectableId)).perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //onView(withId(R.id.checkable_sort)).perform(click());#
+        Context cx = InstrumentationRegistry.getTargetContext();
+        String menue_entry = cx.getResources().getString(R.string.storting_menue);
+
+
+        onView(withText(menue_entry)).perform(click());
+        String menue_entry2 = cx.getResources().getString(SelectableId);
+        onView(withText(menue_entry2)).perform(click());
     }
 
     @Test

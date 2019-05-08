@@ -8,8 +8,11 @@
 
     <ListView
         android:id="@+id/node_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_toolbar1" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/createNoteButton"
@@ -25,17 +28,6 @@
         app:srcCompat="@android:drawable/ic_input_add" />
 
 
-    <!--Spinner
-        android:id="@+id/spinner1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:entries="@array/sort_options"
-        android:prompt="@string/sort_options_prompt"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp" /-->
-
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar1"
         android:layout_width="match_parent"
@@ -47,8 +39,5 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
 
     </android.support.v7.widget.Toolbar>
-
-
-
 
 </android.support.constraint.ConstraintLayout>

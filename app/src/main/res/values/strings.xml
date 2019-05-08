@@ -2,6 +2,9 @@
     <string name="app_name">afternoon5</string>
 
     <string name="sort_options_prompt">Choose sorting</string>
+    <string name="alphabetical">alphabetical</string>
+    <string name="creation_date">creation date</string>
+    <string name="storting_menue">sorting</string>
 
     <string-array name="sort_options">
         <item>Sort by Title</item>

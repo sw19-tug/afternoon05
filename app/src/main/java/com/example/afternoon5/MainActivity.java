@@ -27,6 +27,8 @@ import java.util.Comparator;
 public class MainActivity extends AppCompatActivity {
     private Spinner spinner1;
     private list_adapter adapter;
+    private Comparator<Note> m_list_gradation;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -55,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(myToolbar);
 
-        DataProvider.getInstance();
         DataProvider.getInstance().load(this);
 
         ListView list = (ListView) findViewById(R.id.node_list);
@@ -87,36 +88,35 @@ public class MainActivity extends AppCompatActivity {
         final SharedPreferences prefs;
         prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         final SharedPreferences.Editor prefEditor = prefs.edit();
+        prefEditor.apply();
     }
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.sort_creation_date:
-
-                Collections.sort(DataProvider.getInstance().getNotes(), new Comparator<Note>() {
+                m_list_gradation = new Comparator<Note>() {
                     @Override
                     public int compare(Note o1, Note o2) {
                         return o1.getCreationDate().compareTo(o2.getCreationDate());
                     }
-                });
+                };
                 break;
             case R.id.sort_alphabetical:
-
-                Collections.sort(DataProvider.getInstance().getNotes(), new Comparator<Note>() {
+                m_list_gradation = new Comparator<Note>() {
                     @Override
                     public int compare(Note o1, Note o2) {
                         return o1.getTitle().compareTo(o2.getTitle());
                     }
-                });
+                };
                 break;
-            default: return super.onOptionsItemSelected(item);
-
+            default:
+                return super.onOptionsItemSelected(item);
         }
+        sortList();
         item.setChecked(true);
-        adapter.notifyDataSetChanged();
         DataProvider.getInstance().save(getBaseContext());
 
         SharedPreferences prefs;
@@ -126,9 +126,22 @@ public class MainActivity extends AppCompatActivity {
         prefEditor.apply();
         return true;
     }
+
+    private void sortList() {
+        if (m_list_gradation != null) {
+            Collections.sort(DataProvider.getInstance().getNotes(), m_list_gradation);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
     public void openCreateNote(View view) {
         Intent intent = new Intent(this, CreateNoteActivity.class);
         startActivity(intent);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sortList();
     }
 }

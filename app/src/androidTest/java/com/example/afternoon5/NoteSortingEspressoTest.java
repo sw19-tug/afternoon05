@@ -44,7 +44,7 @@ public class NoteSortingEspressoTest {
     private final int SPINNER_SELECTABLE_SORT_BY_TITLE = R.string.alphabetical;
     private final int SPINNER_SELECTABLE_SORT_BY_CREATION_DATE = R.string.creation_date;
 
-    private void addTestNotes(String title, String text) {
+    public static void addTestNotes(String title, String text) {
         try {
             onView(withText(title)).check(matches(isDisplayed()));
             onView(withText(title)).check(matches(isDisplayed()));

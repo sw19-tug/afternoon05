@@ -29,10 +29,13 @@ public class MainActivityTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(appContext);
+        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(appContext);
+        SharedPreferences settings = appContext.getSharedPreferences("com.example.afternoon5", appContext.MODE_PRIVATE);
         Gson gson = new Gson();
-        TypeToken<ArrayList<Note>> token = new TypeToken<ArrayList<Note>>() {};
+        TypeToken<ArrayList<Note>> token = new TypeToken<ArrayList<Note>>() {
+        };
         ArrayList<Note> notes = gson.fromJson(settings.getString("Notes", ""), token.getType());
-        assertEquals(1, notes.size());
+        assertNotNull(notes);
+        assertTrue(notes.size() >= 1);
     }
 }

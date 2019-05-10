@@ -35,16 +35,9 @@ public class MainActivityEspressoTest {
 
     @Test
     public void testListContent() throws Throwable {
-        final String TITLE = "veryUniqueTestingStringOne";
-        final String TEXT = "veryUniqueTestingStringTwo";
-        // When.
-        activityTestRule.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                //activityTestRule.getActivity().addListElement(new note_obj(TITLE, TEXT));
-                DataProvider.getInstance().addNoteToNotes(new Note(TITLE, TEXT, new Date()));
-            }
-        });
+        final String TITLE = "testListContent";
+        final String TEXT = "text134";
+        NoteSortingEspressoTest.addTestNotes(TITLE, TEXT);
 
         onView(withText(TITLE)).check(matches(isDisplayed()));
         onView(withText(TEXT)).check(matches(isDisplayed()));

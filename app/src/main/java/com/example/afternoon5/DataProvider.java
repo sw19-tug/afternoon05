@@ -128,8 +128,7 @@ class DataProvider {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
             FileOutputStream fos = new FileOutputStream(outZipPath.getAbsolutePath() + "/" +  sdf.format(cal.getTime())+".zip");
             ZipOutputStream zos = new ZipOutputStream(fos);
-
-
+            
             for (int i = 0; i < files.length; i++) {
 
                 byte[] buffer = new byte[1024];

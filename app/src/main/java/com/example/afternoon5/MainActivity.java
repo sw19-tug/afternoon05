@@ -63,18 +63,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int pos, long id) {
-                // TODO Auto-generated method stub
-                Log.i("MAIN", "TEST");
 
                 for (int i = 0; i < list.getCount(); i++)
                 {
-                    // Log.i("MAIN", "DEBUG: " + list.getAdapter().get);
-                    // list.getAdapter().getView(i, parent, null).findViewById(R.id.export_checkbox).setVisibility(View.VISIBLE);
 
                     View view1  = list.getChildAt(i);
                     view1.findViewById(R.id.export_checkbox).setVisibility(View.VISIBLE);
-                    //findViewById(R.id.action_export).setVisibility(View.VISIBLE);
-
 
                 }
                 menu.findItem(R.id.action_export).setVisible(true);
@@ -86,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         list.setOnItemClickListener((parent, view, position, id) -> {
-            //ViewEditNoteActivity.callIntentwithExtra(MainActivity.this, DataProvider.getInstance().getNotes().get(position));
 
             Intent intent = new Intent(getBaseContext(), ViewEditNoteActivity.class);
             intent.putExtra("position" ,position);
@@ -102,14 +95,8 @@ public class MainActivity extends AppCompatActivity {
         final ListView list = (ListView) findViewById(R.id.node_list);
         for (int i = 0; i < list.getCount(); i++)
         {
-            // Log.i("MAIN", "DEBUG: " + list.getAdapter().get);
-            // list.getAdapter().getView(i, parent, null).findViewById(R.id.export_checkbox).setVisibility(View.VISIBLE);
-
             View view1  = list.getChildAt(i);
             view1.findViewById(R.id.export_checkbox).setVisibility(View.GONE);
-            //findViewById(R.id.action_export).setVisibility(View.VISIBLE);
-
-
         }
         menu.findItem(R.id.action_export).setVisible(false);
         menu.findItem(R.id.action_cancel).setVisible(false);
@@ -120,9 +107,6 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Note> listtoExport = new ArrayList<>();
         for (int i = 0; i < list.getCount(); i++)
         {
-            // Log.i("MAIN", "DEBUG: " + list.getAdapter().get);
-            // list.getAdapter().getView(i, parent, null).findViewById(R.id.export_checkbox).setVisibility(View.VISIBLE);
-
             View view1  = list.getChildAt(i);
             if (((CheckBox)view1.findViewById(R.id.export_checkbox)).isChecked())
                 listtoExport.add(DataProvider.getInstance().getNotes().get(i));
@@ -161,29 +145,18 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
 
-                // Permission is not granted
-                // Should we show an explanation?
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    // Show an explanation to the user *asynchronously* -- don't block
-                    // this thread waiting for the user's response! After the user
-                    // sees the explanation, try again to request the permission.
+
                 } else {
                     Log.i("MAIN", "NO PERM");
-                    // No explanation needed; request the permission
+
                     ActivityCompat.requestPermissions(this,
                             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             3);
 
-                    // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                    // app-defined int constant. The callback method gets the
-                    // result of the request.
                 }
-            } else {
-                // Permission has already been granted
             }
-
-
             return true;
         }
         return false;

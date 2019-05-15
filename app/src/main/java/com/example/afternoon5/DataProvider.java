@@ -10,8 +10,15 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 class DataProvider {
     private static final DataProvider ourInstance = new DataProvider();
@@ -97,17 +104,49 @@ class DataProvider {
 
     public void exportToExternalStorage(ArrayList<Note> notes)
     {
-        File dir  = new File(Environment.getExternalStorageDirectory(), "NoteExport");
+        File dir  = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/NoteExport");
         if (!dir.mkdirs()) {
             Log.e("DATA", "Directory not created");
         }
+        ArrayList<File> files = new ArrayList<>();
         for(Note note : notes)
         {
             File file = noteToFile(note, dir);
-
+            files.add(file);
         }
+        File [] out = files.toArray(new File[0]);
+        zipFilesToFolder(out, dir);
+
+        files.forEach(x -> x.delete());
 
 
+    }
+
+    private void zipFilesToFolder(File [] files, File outZipPath) {
+        try {
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
+            FileOutputStream fos = new FileOutputStream(outZipPath.getAbsolutePath() + "/" +  sdf.format(cal.getTime())+".zip");
+            ZipOutputStream zos = new ZipOutputStream(fos);
+
+
+            for (int i = 0; i < files.length; i++) {
+
+                byte[] buffer = new byte[1024];
+                FileInputStream fis = new FileInputStream(files[i]);
+                zos.putNextEntry(new ZipEntry(files[i].getName()));
+                int length;
+                while ((length = fis.read(buffer)) > 0) {
+                    zos.write(buffer, 0, length);
+                }
+                zos.closeEntry();
+                fis.close();
+            }
+            zos.close();
+        } catch (IOException ioe) {
+            Log.e("", ioe.getMessage());
+            ioe.printStackTrace();
+        }
     }
     private File noteToFile(Note note, File path)
     {
@@ -123,7 +162,7 @@ class DataProvider {
         }}
         catch (Exception e)
         {
-
+            e.printStackTrace();
         }
         return file;
 

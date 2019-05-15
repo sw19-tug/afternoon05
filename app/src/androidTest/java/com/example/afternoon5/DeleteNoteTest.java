@@ -1,50 +1,53 @@
 package com.example.afternoon5;
 
 
-import android.support.test.espresso.ViewAssertion;
+import android.support.test.espresso.DataInteraction;
 import android.support.test.espresso.ViewInteraction;
-import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.widget.ListView;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class CreateNoteActivityTest {
+public class DeleteNoteTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void createNoteTest() {
+    public void deleteNoteTest() {
 
-        int noteSize = DataProvider.getInstance().getNotes().size();
-
+        DataProvider.getInstance().setNotes(new ArrayList<>());
         ViewInteraction floatingActionButton = onView(
                 allOf(withId(R.id.createNoteButton),
                         childAtPosition(
@@ -85,6 +88,15 @@ public class CreateNoteActivityTest {
                         isDisplayed()));
         appCompatEditText3.perform(replaceText("test"), closeSoftKeyboard());
 
+        ViewInteraction appCompatMultiAutoCompleteTextView = onView(
+                allOf(withId(R.id.tagsTextView),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.support.constraint.ConstraintLayout")),
+                                        0),
+                                2),
+                        isDisplayed()));
+        appCompatMultiAutoCompleteTextView.perform(replaceText("test"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.SaveNoteButton), withText("Create Note"),
@@ -96,17 +108,44 @@ public class CreateNoteActivityTest {
                         isDisplayed()));
         appCompatButton.perform(click());
 
+        DataInteraction constraintLayout = onData(anything())
+                .inAdapterView(allOf(withId(R.id.node_list),
+                        childAtPosition(
+                                withClassName(is("android.support.constraint.ConstraintLayout")),
+                                0)))
+                .atPosition(0);
+        constraintLayout.perform(click());
 
-        ViewInteraction appCompatList = onView(
-                allOf(withId(R.id.node_list),
+        ViewInteraction actionMenuItemView = onView(
+                allOf(withId(R.id.action_delete), withContentDescription("Delete"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.action_bar),
+                                        1),
+                                0),
                         isDisplayed()));
-        appCompatList.check(ViewAssertions.matches(Matchers.withListSize(noteSize+1)));
+        actionMenuItemView.perform(click());
 
-        Assert.assertEquals(noteSize+1, DataProvider.getInstance().getNotes().size());
+        ViewInteraction appCompatButton2 = onView(
+                allOf(withId(android.R.id.button1), withText("Delete"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.buttonPanel),
+                                        0),
+                                3)));
+        appCompatButton2.perform(scrollTo(), click());
 
+        ViewInteraction listView = onView(
+                allOf(withId(R.id.node_list),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        listView.check(matches(isDisplayed()));
 
-
-
+        assertEquals(0, DataProvider.getInstance().getNotes().size());
 
     }
 
@@ -125,21 +164,6 @@ public class CreateNoteActivityTest {
                 ViewParent parent = view.getParent();
                 return parent instanceof ViewGroup && parentMatcher.matches(parent)
                         && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
-    }
-
-
-}
-class Matchers {
-    public static Matcher<View> withListSize (final int size) {
-        return new TypeSafeMatcher<View> () {
-            @Override public boolean matchesSafely (final View view) {
-                return ((ListView) view).getCount () == size;
-            }
-
-            @Override public void describeTo (final Description description) {
-                description.appendText ("ListView should have " + size + " items");
             }
         };
     }

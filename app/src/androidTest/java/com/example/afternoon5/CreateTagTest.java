@@ -1,24 +1,23 @@
 package com.example.afternoon5;
 
 
-import android.support.test.espresso.ViewAssertion;
 import android.support.test.espresso.ViewInteraction;
-import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.widget.ListView;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Assert;
+import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -35,15 +34,15 @@ import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class CreateNoteActivityTest {
+public class CreateTagTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void createNoteTest() {
+    public void createTagTest() {
 
-        int noteSize = DataProvider.getInstance().getNotes().size();
+        DataProvider.getInstance().setNotes(new ArrayList<>());
 
         ViewInteraction floatingActionButton = onView(
                 allOf(withId(R.id.createNoteButton),
@@ -63,19 +62,9 @@ public class CreateNoteActivityTest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText.perform(click());
+        appCompatEditText.perform(replaceText("test"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.editTitle),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.support.constraint.ConstraintLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText2.perform(replaceText("test"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText3 = onView(
                 allOf(withId(R.id.editText),
                         childAtPosition(
                                 childAtPosition(
@@ -83,8 +72,17 @@ public class CreateNoteActivityTest {
                                         0),
                                 1),
                         isDisplayed()));
-        appCompatEditText3.perform(replaceText("test"), closeSoftKeyboard());
+        appCompatEditText2.perform(replaceText("test"), closeSoftKeyboard());
 
+        ViewInteraction appCompatMultiAutoCompleteTextView = onView(
+                allOf(withId(R.id.tagsTextView),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.support.constraint.ConstraintLayout")),
+                                        0),
+                                2),
+                        isDisplayed()));
+        appCompatMultiAutoCompleteTextView.perform(replaceText("test, hello"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.SaveNoteButton), withText("Create Note"),
@@ -96,18 +94,9 @@ public class CreateNoteActivityTest {
                         isDisplayed()));
         appCompatButton.perform(click());
 
+        ViewInteraction textView = onView(withId(R.id.note_tags));
 
-        ViewInteraction appCompatList = onView(
-                allOf(withId(R.id.node_list),
-                        isDisplayed()));
-        appCompatList.check(ViewAssertions.matches(Matchers.withListSize(noteSize+1)));
-
-        Assert.assertEquals(noteSize+1, DataProvider.getInstance().getNotes().size());
-
-
-
-
-
+        textView.check(matches(withText("test, hello, ")));
     }
 
     private static Matcher<View> childAtPosition(
@@ -125,21 +114,6 @@ public class CreateNoteActivityTest {
                 ViewParent parent = view.getParent();
                 return parent instanceof ViewGroup && parentMatcher.matches(parent)
                         && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
-    }
-
-
-}
-class Matchers {
-    public static Matcher<View> withListSize (final int size) {
-        return new TypeSafeMatcher<View> () {
-            @Override public boolean matchesSafely (final View view) {
-                return ((ListView) view).getCount () == size;
-            }
-
-            @Override public void describeTo (final Description description) {
-                description.appendText ("ListView should have " + size + " items");
             }
         };
     }

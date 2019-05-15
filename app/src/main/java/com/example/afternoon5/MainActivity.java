@@ -1,10 +1,16 @@
 package com.example.afternoon5;
 
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+
 
 
 import android.support.v7.widget.Toolbar;
@@ -42,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -53,9 +60,19 @@ public class MainActivity extends AppCompatActivity {
 
         DataProvider.getInstance().load(this);
 
-        ListView list = (ListView) findViewById(R.id.node_list);
+        final ListView list = (ListView) findViewById(R.id.node_list);
+
         adapter = new list_adapter(this, DataProvider.getInstance().getNotes());
         list.setAdapter(adapter);
+        list.setItemsCanFocus(false);
+        list.setOnItemClickListener((parent, view, position, id) -> {
+            //ViewEditNoteActivity.callIntentwithExtra(MainActivity.this, DataProvider.getInstance().getNotes().get(position));
+            Log.i("MAIN", "FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
+            Intent intent = new Intent(getBaseContext(), ViewEditNoteActivity.class);
+            intent.putExtra("position" ,position);
+            startActivity(intent);
+
+        });
 
         final boolean check_for_created = true;
 
@@ -133,11 +150,20 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+
+
+
     public void openCreateNote(View view) {
         Intent intent = new Intent(this, CreateNoteActivity.class);
         startActivity(intent);
     }
 
+
+    public void refreshList() {
+    final ListView list = findViewById(R.id.node_list);
+    final list_adapter adapter = new list_adapter(this,DataProvider.getInstance().getNotes());
+    list.setAdapter(adapter);
+    }
     @Override
     protected void onResume() {
         super.onResume();

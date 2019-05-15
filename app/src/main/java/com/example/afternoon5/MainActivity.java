@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Spinner;
 
 import com.example.afternoon5.HelperClasses.Note;
 import com.example.afternoon5.HelperClasses.list_adapter;
@@ -25,22 +24,17 @@ import java.util.Comparator;
 
 
 public class MainActivity extends AppCompatActivity {
-    private Spinner spinner1;
     private list_adapter adapter;
-    private Comparator<Note> m_list_gradation;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_menu_main_activity, menu);
         MenuItem checkable_menue = menu.findItem(R.id.checkable_sort);
-        final SharedPreferences prefs;
-        prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        final SharedPreferences.Editor prefEditor = prefs.edit();
-        int spinner_value = prefs.getInt("spinner value start", R.id.sort_alphabetical);
-        MenuItem sort_option;
+        int spinner_value = getSortingPreference();
         Menu submenue = checkable_menue.getSubMenu();
-        sort_option = submenue.findItem(spinner_value);
+        MenuItem sort_option = submenue.findItem(spinner_value);
 
         sort_option.setChecked(true);
 
@@ -94,8 +88,26 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id != R.id.sort_alphabetical && id != R.id.sort_creation_date) {
+            return super.onOptionsItemSelected(item);
+        }
 
-        switch (item.getItemId()) {
+        sortList(item.getItemId());
+        item.setChecked(true);
+        DataProvider.getInstance().save(getBaseContext());
+
+        SharedPreferences prefs;
+        prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        final SharedPreferences.Editor prefEditor = prefs.edit();
+        prefEditor.putInt("spinner value start", item.getItemId());
+        prefEditor.apply();
+        return true;
+    }
+
+    private void sortList(int item_id) {
+        Comparator<Note> m_list_gradation;
+        switch (item_id) {
             case R.id.sort_creation_date:
                 m_list_gradation = new Comparator<Note>() {
                     @Override
@@ -113,25 +125,12 @@ public class MainActivity extends AppCompatActivity {
                 };
                 break;
             default:
-                return super.onOptionsItemSelected(item);
+                return;
         }
-        sortList();
-        item.setChecked(true);
-        DataProvider.getInstance().save(getBaseContext());
 
-        SharedPreferences prefs;
-        prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        final SharedPreferences.Editor prefEditor = prefs.edit();
-        prefEditor.putInt("spinner value start", item.getItemId());
-        prefEditor.apply();
-        return true;
-    }
 
-    private void sortList() {
-        if (m_list_gradation != null) {
-            Collections.sort(DataProvider.getInstance().getNotes(), m_list_gradation);
-            adapter.notifyDataSetChanged();
-        }
+        Collections.sort(DataProvider.getInstance().getNotes(), m_list_gradation);
+        adapter.notifyDataSetChanged();
     }
 
     public void openCreateNote(View view) {
@@ -142,6 +141,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        sortList();
+        sortList(getSortingPreference());
+    }
+
+    private int getSortingPreference() {
+        final SharedPreferences prefs;
+        prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        int value = prefs.getInt("spinner value start", R.id.sort_alphabetical);
+        return value;
     }
 }

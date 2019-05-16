@@ -21,12 +21,13 @@ public class Note {
 
     public Date getCreationDate() {
         return creation_date;
-
     }
+
     public Note(String title, String text, String[] tags) {
         this.title = title;
         this.text = text;
         this.tags = removeDuplicates(new ArrayList<>(Arrays.asList(tags)));
+        this.creation_date = new Date();
     }
 
     public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list)

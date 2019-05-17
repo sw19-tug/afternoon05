@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.AdapterView;
 
 
-
 import android.support.v7.widget.Toolbar;
 
 import android.view.Menu;
@@ -48,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -69,37 +67,12 @@ public class MainActivity extends AppCompatActivity {
             //ViewEditNoteActivity.callIntentwithExtra(MainActivity.this, DataProvider.getInstance().getNotes().get(position));
             Log.i("MAIN", "FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
             Intent intent = new Intent(getBaseContext(), ViewEditNoteActivity.class);
-            intent.putExtra("position" ,position);
+            intent.putExtra("position", position);
             startActivity(intent);
 
         });
 
-        final boolean check_for_created = true;
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                //capital letters will be sorted before small letters
-                Collections.sort(DataProvider.getInstance().getNotes(), new Comparator<Note>() {
-                    @Override
-                    public int compare(Note o1, Note o2) {
-                        if (check_for_created) {
-                            return o1.getCreationDate().compareTo(o2.getCreationDate());
-                        } else {
-                            return o1.getTitle().compareTo(o2.getTitle());
-                        }
-                    }
-                });
-                adapter.notifyDataSetChanged();
-                DataProvider.getInstance().save(getBaseContext());
-            }
-        });
-
-        final SharedPreferences prefs;
-        prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        final SharedPreferences.Editor prefEditor = prefs.edit();
-        prefEditor.apply();
+        sortList(getSortingPreference());
     }
 
 
@@ -151,8 +124,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     public void openCreateNote(View view) {
         Intent intent = new Intent(this, CreateNoteActivity.class);
         startActivity(intent);
@@ -160,10 +131,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void refreshList() {
-    final ListView list = findViewById(R.id.node_list);
-    final list_adapter adapter = new list_adapter(this,DataProvider.getInstance().getNotes());
-    list.setAdapter(adapter);
+        final ListView list = findViewById(R.id.node_list);
+        final list_adapter adapter = new list_adapter(this, DataProvider.getInstance().getNotes());
+        list.setAdapter(adapter);
     }
+
     @Override
     protected void onResume() {
         super.onResume();

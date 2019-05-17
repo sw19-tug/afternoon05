@@ -16,6 +16,8 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -143,7 +145,7 @@ public class DeleteNoteTest {
                                         0),
                                 0),
                         isDisplayed()));
-        listView.check(matches(isDisplayed()));
+        listView.check(doesNotExist());
 
         assertEquals(0, DataProvider.getInstance().getNotes().size());
 

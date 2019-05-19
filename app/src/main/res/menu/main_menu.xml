@@ -1,0 +1,36 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- "Mark Favorite", should appear as action button if possible -->
+    <item
+        android:id="@+id/action_export"
+        android:icon="@drawable/ic_archive_white_24dp"
+        android:onClick="exportSelectedNotes"
+        android:title="@string/export_icon"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_cancel"
+        android:icon="@drawable/ic_close_black_24dp"
+        android:onClick="closeExport"
+        android:title="@android:string/cancel"
+        android:visible="false"
+        app:showAsAction="always" />
+
+    <item android:id="@+id/checkable_sort"
+        android:title="@string/storting_menue" >
+        <menu xmlns:android="http://schemas.android.com/apk/res/android">
+            <group android:checkableBehavior="single">
+                <item android:id="@+id/sort_alphabetical"
+                    android:title="@string/alphabetical" />
+                <item android:id="@+id/sort_creation_date"
+                    android:title="@string/creation_date" />
+            </group>
+        </menu>
+
+    </item>
+
+    <!-- Settings, should always be in the overflow -->
+
+
+</menu>

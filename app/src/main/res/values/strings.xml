@@ -1,7 +1,8 @@
 <resources>
-
     <string name="app_name">NOTE</string>
     <string name="delete_icon">Delete</string>
+    <string name="export_icon">Export</string>
+    <string name="toast_export">Export successful</string>
 
     <string name="sort_options_prompt">Choose sorting</string>
     <string name="alphabetical">alphabetical</string>

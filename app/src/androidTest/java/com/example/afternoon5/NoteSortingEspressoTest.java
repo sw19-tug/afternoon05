@@ -8,9 +8,14 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.closeSoftKeyboard;
@@ -44,6 +49,17 @@ public class NoteSortingEspressoTest {
     private final int SPINNER_SELECTABLE_SORT_BY_TITLE = R.string.alphabetical;
     private final int SPINNER_SELECTABLE_SORT_BY_CREATION_DATE = R.string.creation_date;
 
+    @Before
+    public void setup()
+    {
+        DataProvider.getInstance().setNotes(new ArrayList<>());
+    }
+    @After
+    public void clean()
+    {
+        DataProvider.getInstance().setNotes(new ArrayList<>());
+    }
+
     public static void addTestNotes(String title, String text) {
         try {
             onView(withText(title)).check(matches(isDisplayed()));
@@ -59,7 +75,7 @@ public class NoteSortingEspressoTest {
 
     private void setSortMode(int SelectableId) {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-        //onView(withId(R.id.checkable_sort)).perform(click());
+
         Context cx = InstrumentationRegistry.getTargetContext();
         String menue_entry = cx.getResources().getString(R.string.storting_menue);
         onView(withText(menue_entry)).check(matches(isDisplayed())).perform(click());
@@ -75,6 +91,9 @@ public class NoteSortingEspressoTest {
         addTestNotes("E" + TITLE, "E" + TEXT);
         addTestNotes("D" + TITLE, "D" + TEXT);
     }
+
+
+
 
     @Test
     public void testMenuIsDisplayed() throws InterruptedException {
@@ -92,27 +111,29 @@ public class NoteSortingEspressoTest {
 
     @Test
     public void testAlphabeticalSortingFunction() throws InterruptedException {
+
         setSortMode(SPINNER_SELECTABLE_SORT_BY_CREATION_DATE);
         addTestNodes();
         setSortMode(SPINNER_SELECTABLE_SORT_BY_TITLE);
 
-        //Check sorting order
         onView(withText("A" + TITLE)).perform(scrollTo()).check(isAbove(withText("B" + TITLE)));
         onView(withText("C" + TITLE)).perform(scrollTo()).check(isBelow(withText("B" + TITLE)));
         onView(withText("A" + TITLE)).perform(scrollTo()).check(isAbove(withText("C" + TITLE)));
+
     }
 
     @Test
     public void testCreationDateSortingFunction() throws InterruptedException {
+
         setSortMode(SPINNER_SELECTABLE_SORT_BY_TITLE);
         addTestNodes();
         setSortMode(SPINNER_SELECTABLE_SORT_BY_CREATION_DATE);
 
-        //Check sorting order
         onView(withText("C" + TITLE)).perform(scrollTo()).check(isAbove(withText("B" + TITLE)));
         onView(withText("B" + TITLE)).perform(scrollTo()).check(isAbove(withText("A" + TITLE)));
         onView(withText("A" + TITLE)).perform(scrollTo()).check(isAbove(withText("E" + TITLE)));
         onView(withText("E" + TITLE)).perform(scrollTo()).check(isAbove(withText("D" + TITLE)));
+
     }
 
     @Test
@@ -123,7 +144,6 @@ public class NoteSortingEspressoTest {
         addTestNotes("H" + TITLE, "H" + TEXT);
         addTestNotes("G" + TITLE, "G" + TEXT);
 
-        //Check sorting order
         onView(withText("I" + TITLE)).perform(scrollTo()).check(isAbove(withText("H" + TITLE)));
         onView(withText("G" + TITLE)).perform(scrollTo()).check(isBelow(withText("I" + TITLE)));
         onView(withText("H" + TITLE)).perform(scrollTo()).check(isAbove(withText("G" + TITLE)));
@@ -137,7 +157,6 @@ public class NoteSortingEspressoTest {
         addTestNotes("K" + TITLE, TEXT);
         addTestNotes("J" + TITLE, TEXT);
 
-        //Check sorting order
         onView(withText("J" + TITLE)).perform(scrollTo()).check(isAbove(withText("K" + TITLE)));
         onView(withText("K" + TITLE)).perform(scrollTo()).check(isAbove(withText("L" + TITLE)));
         onView(withText("J" + TITLE)).perform(scrollTo()).check(isAbove(withText("L" + TITLE)));

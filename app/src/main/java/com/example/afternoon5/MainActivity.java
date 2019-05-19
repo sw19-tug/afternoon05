@@ -3,6 +3,8 @@ package com.example.afternoon5;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Environment;
@@ -19,7 +21,11 @@ import android.view.View;
 import android.widget.AdapterView;
 
 
+import android.support.v7.widget.Toolbar;
 
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -31,8 +37,13 @@ import com.example.afternoon5.HelperClasses.list_adapter;
 
 import java.util.ArrayList;
 
+import java.util.Collections;
+import java.util.Comparator;
+
 
 public class MainActivity extends AppCompatActivity {
+    private list_adapter adapter;
+
 
     Menu menu;
 
@@ -41,6 +52,12 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         this.menu = menu;
+        MenuItem checkable_menue = menu.findItem(R.id.checkable_sort);
+        int spinner_value = getSortingPreference();
+        Menu submenue = checkable_menue.getSubMenu();
+        MenuItem sort_option = submenue.findItem(spinner_value);
+
+        sort_option.setChecked(true);
         return true;
     }
 
@@ -50,12 +67,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DataProvider.getInstance();
         DataProvider.getInstance().load(this);
 
         final ListView list = (ListView) findViewById(R.id.node_list);
 
-        final list_adapter adapter = new list_adapter(this, DataProvider.getInstance().getNotes());
+        adapter = new list_adapter(this, DataProvider.getInstance().getNotes());
         list.setAdapter(adapter);
         list.setItemsCanFocus(false);
         list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -87,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        sortList(getSortingPreference());
 
     }
 
@@ -121,6 +138,25 @@ public class MainActivity extends AppCompatActivity {
         closeExport(menuItem);
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id != R.id.sort_alphabetical && id != R.id.sort_creation_date) {
+            return super.onOptionsItemSelected(item);
+        }
+
+        sortList(item.getItemId());
+        item.setChecked(true);
+        DataProvider.getInstance().save(getBaseContext());
+
+        SharedPreferences prefs;
+        prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        final SharedPreferences.Editor prefEditor = prefs.edit();
+        prefEditor.putInt("spinner value start", item.getItemId());
+        prefEditor.apply();
+        return true;
     }
 
 
@@ -160,6 +196,46 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    private void sortList(int item_id) {
+        Comparator<Note> m_list_gradation;
+        switch (item_id) {
+            case R.id.sort_creation_date:
+                m_list_gradation = new Comparator<Note>() {
+                    @Override
+                    public int compare(Note o1, Note o2) {
+                        return o1.getCreationDate().compareTo(o2.getCreationDate());
+                    }
+                };
+                break;
+            case R.id.sort_alphabetical:
+                m_list_gradation = new Comparator<Note>() {
+                    @Override
+                    public int compare(Note o1, Note o2) {
+                        return o1.getTitle().compareTo(o2.getTitle());
+                    }
+                };
+                break;
+            default:
+                return;
+        }
+
+
+        Collections.sort(DataProvider.getInstance().getNotes(), m_list_gradation);
+        adapter.notifyDataSetChanged();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sortList(getSortingPreference());
+    }
+
+    private int getSortingPreference() {
+        final SharedPreferences prefs;
+        prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        int value = prefs.getInt("spinner value start", R.id.sort_alphabetical);
+        return value;
     }
 
 }

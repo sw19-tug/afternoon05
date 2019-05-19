@@ -65,7 +65,6 @@ class DataProvider {
         Gson gson = new Gson();
 
         String json = gson.toJson(notes);
-
         myeditor.putString("Notes",json);
 
 

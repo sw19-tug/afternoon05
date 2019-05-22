@@ -8,6 +8,7 @@
     <string name="alphabetical">alphabetical</string>
     <string name="creation_date">creation date</string>
     <string name="storting_menue">sorting</string>
+    <string name="share_icon" />
 
     <string-array name="sort_options">
         <item>Sort by Title</item>

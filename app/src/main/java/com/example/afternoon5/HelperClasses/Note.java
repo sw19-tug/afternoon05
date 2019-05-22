@@ -76,6 +76,21 @@ public class Note {
         return tagsAsString;
     }
 
+    public String getTagsAsStringHashes()
+    {
+        String tagsAsString = "";
+        for (String s : tags)
+        {
+            if (!s.isEmpty() && !s.contentEquals(" "))
+            {
+                tagsAsString = tagsAsString + "#" + s + " ";
+            }
+        }
+        return tagsAsString;
+    }
+
+
+
 
 
 

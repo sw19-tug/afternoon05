@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                     view1.findViewById(R.id.export_checkbox).setVisibility(View.VISIBLE);
 
                 }
+                menu.findItem(R.id.action_share).setVisible(true);
                 menu.findItem(R.id.action_export).setVisible(true);
                 menu.findItem(R.id.action_cancel).setVisible(true);
                 return true;
@@ -117,8 +118,46 @@ public class MainActivity extends AppCompatActivity {
         }
         menu.findItem(R.id.action_export).setVisible(false);
         menu.findItem(R.id.action_cancel).setVisible(false);
+        menu.findItem(R.id.action_share).setVisible(false);
 
     }
+
+
+    public void shareSelectedNotes(MenuItem menuItem) {
+
+        final ListView list = (ListView) findViewById(R.id.node_list);
+        ArrayList<Note> listtoShare = new ArrayList<>();
+        for (int i = 0; i < list.getCount(); i++)
+        {
+            View view1  = list.getChildAt(i);
+            if (((CheckBox)view1.findViewById(R.id.export_checkbox)).isChecked())
+                listtoShare.add(DataProvider.getInstance().getNotes().get(i));
+        }
+
+
+        StringBuilder share_text = new StringBuilder("");
+
+        for (Note note : listtoShare)
+        {
+            share_text.append("Titel: ");
+            share_text.append(note.getTitle());
+            share_text.append("\n");
+            share_text.append(note.getText());
+            share_text.append("\n");
+            share_text.append(note.getTagsAsStringHashes());
+            share_text.append("\n\n");
+        }
+        if(share_text.length() >= 3)
+            share_text.delete(share_text.length()-3, share_text.length());
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, share_text.toString());
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
+
+    }
+
     public void exportSelectedNotes(MenuItem menuItem) {
         final ListView list = (ListView) findViewById(R.id.node_list);
         ArrayList<Note> listtoExport = new ArrayList<>();

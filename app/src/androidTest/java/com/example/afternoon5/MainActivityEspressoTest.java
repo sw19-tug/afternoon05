@@ -22,7 +22,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
+import java.util.ArrayList;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -44,6 +45,10 @@ public class MainActivityEspressoTest {
 
     @Test
     public void testListVisible() {
+        DataProvider.getInstance().setNotes(new ArrayList<>());
+        final String TITLE = "onenode";
+        final String TEXT = "node";
+        NoteSortingEspressoTest.addTestNotes(TITLE, TEXT);
         onView(withId(R.id.node_list)).check(matches(isDisplayed()));
     }
 

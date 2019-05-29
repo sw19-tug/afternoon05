@@ -13,17 +13,22 @@ public class Note {
 
     private ArrayList<String> tags;
 
-    public Note(String title, String text) {
+    public Note(String title, String text, boolean pinned) {
         this.title = title;
         this.text = text;
         this.tags = new ArrayList<>();
-        this.pinned = false;
+        this.pinned = pinned;
     }
-    public Note(String title, String text, String[] tags) {
+    public Note(String title, String text, String[] tags, boolean pinned_1) {
         this.title = title;
         this.text = text;
         this.tags = removeDuplicates(new ArrayList<>(Arrays.asList(tags)));
+        this.pinned = pinned_1;
     }
+
+
+    public Note() {}
+
 
     public static <T> ArrayList<T> removeDuplicates(ArrayList<T> list)
     {
@@ -71,6 +76,15 @@ public class Note {
         return tagsAsString;
     }
 
+    public void setPinn(boolean pinned_1)
+    {
+        this.pinned = pinned_1;
+    }
+
+    public boolean getPinn()
+    {
+        return pinned;
+    }
 
 
 
@@ -78,10 +92,6 @@ public class Note {
         this.tags = removeDuplicates(new ArrayList<>(Arrays.asList(tags)));
     }
 
-    public void onCheckboxClicked(View view)
-    {
-        boolean checked = ((CheckBox) view).isChecked();
-        if (checked)
-            this.pinned = true;
-    }
+
+
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 
@@ -56,7 +57,8 @@ public class list_adapter extends BaseAdapter {
                     .findViewById(R.id.note_text);
             viewHolder.note_tags = (TextView) convertView
                     .findViewById(R.id.note_tags);
-
+            viewHolder.checkBox2 = (CheckBox) convertView
+                    .findViewById(R.id.checkBox2);
 
             convertView.setTag(viewHolder);
         } else {
@@ -71,14 +73,19 @@ public class list_adapter extends BaseAdapter {
 
         viewHolder.note_tags.setText(pairs.get(position).getTagsAsString());
 
+        viewHolder.checkBox2.setChecked(pairs.get(position).getPinn());
+
 
         return convertView;
     }
+
+
 
     public class ViewHolder {
         public TextView note_title;
         public TextView note_text;
         public TextView note_tags;
+        public CheckBox checkBox2; //
 
     }
 }

@@ -10,13 +10,18 @@ import android.view.View;
 import android.widget.AdapterView;
 
 
-
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 
 import com.example.afternoon5.HelperClasses.Note;
 import com.example.afternoon5.HelperClasses.list_adapter;
+
+import org.w3c.dom.Node;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -47,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     public void openCreateNote(View view) {
         Intent intent = new Intent(this, CreateNoteActivity.class);
         startActivity(intent);
@@ -55,10 +59,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void onCheckboxClicked(View view)
+    {
+        final ListView list = (ListView) findViewById(R.id.node_list);
+        Note newNote = new Note();
+
+        for (int i = 0; i < list.getCount(); i++) {
+            View view1 = list.getChildAt(i);
+            if (((CheckBox) view1.findViewById(R.id.checkBox2)).isChecked())
+
+            {
+                int number = i;
+                String numberAsString = Integer.toString(number);
+                Log.d("Meine_ID", numberAsString);
+                ArrayList <Note> old_notes = DataProvider.getInstance().getNotes();
+                old_notes.get(i).setPinn(true);
+
+
+            }
+
+            else
+            {
+                ArrayList <Note> old_notes = DataProvider.getInstance().getNotes();
+                old_notes.get(i).setPinn(false);
+            }
+
+        }
+    }
+
+
+
     public void refreshList() {
     final ListView list = findViewById(R.id.node_list);
     final list_adapter adapter = new list_adapter(this,DataProvider.getInstance().getNotes());
     list.setAdapter(adapter);
     }
-
 }
+

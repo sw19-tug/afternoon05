@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList <Note> old_notes = DataProvider.getInstance().getNotes();
                 old_notes.get(i).setPinn(false);
             }
-
         }
+        DataProvider.getInstance().save(this);
     }
 
 

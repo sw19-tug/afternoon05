@@ -56,12 +56,13 @@ public class MainActivityEspressoTest {
     public void testListContent() throws Throwable {
         final String TITLE = "veryUniqueTestingStringOne";
         final String TEXT = "veryUniqueTestingStringTwo";
+        final boolean PIN = false;
         // When.
         activityTestRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 //activityTestRule.getActivity().addListElement(new note_obj(TITLE, TEXT));
-                DataProvider.getInstance().addNoteToNotes(new Note(TITLE, TEXT));
+                DataProvider.getInstance().addNoteToNotes(new Note(TITLE, TEXT, PIN));
                 activityTestRule.getActivity().refreshList();
 
             }

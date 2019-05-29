@@ -121,12 +121,7 @@ public class ExportNoteTest {
         appCompatCheckBox.perform(click());
 
         ViewInteraction actionMenuItemView = onView(
-                allOf(withId(R.id.action_export), withContentDescription("Export"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.action_bar),
-                                        1),
-                                0),
+                allOf(withId(R.id.action_export),
                         isDisplayed()));
         actionMenuItemView.perform(click());
 
@@ -190,12 +185,7 @@ public class ExportNoteTest {
         constraintLayout.perform(longClick());
 
         ViewInteraction actionMenuItemView = onView(
-                allOf(withId(R.id.action_cancel), withContentDescription("Cancel"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.action_bar),
-                                        1),
-                                1),
+                allOf(withId(R.id.action_cancel),
                         isDisplayed()));
         actionMenuItemView.perform(click());
 

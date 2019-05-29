@@ -1,6 +1,8 @@
 package com.example.afternoon5;
 
 
+import android.net.Uri;
+import android.os.Environment;
 import android.support.test.espresso.DataInteraction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.filters.LargeTest;
@@ -14,38 +16,37 @@ import android.view.ViewParent;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.File;
 import java.util.ArrayList;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class ExportNoteTest {
+public class ImportNoteTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
@@ -56,7 +57,7 @@ public class ExportNoteTest {
                     "android.permission.WRITE_EXTERNAL_STORAGE");
 
     @Test
-    public void exportNoteTest() {
+    public void importNoteTest() {
         DataProvider.getInstance().setNotes(new ArrayList<>());
 
         ViewInteraction floatingActionButton = onView(
@@ -128,71 +129,40 @@ public class ExportNoteTest {
         onView(withText(R.string.toast_export)).inRoot(withDecorView(not(is(mActivityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
 
 
-    }
-    @Test
-    public void closeExportNoteTest() {
-        DataProvider.getInstance().setNotes(new ArrayList<>());
+        int count_notes = DataProvider.getInstance().getNotes().size();
 
-        ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.createNoteButton),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        floatingActionButton.perform(click());
+        File directory = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/NoteExport");
+        File[] files = directory.listFiles();
+        if (files.length > 0)
+        {
 
+            DataProvider.getInstance().unzipFileAndSaveNotes(Uri.fromFile(files[0]), mActivityTestRule.getActivity());
 
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.editTitle),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.support.constraint.ConstraintLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText.perform(replaceText("teste"), closeSoftKeyboard());
+            try {
+                mActivityTestRule.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mActivityTestRule.getActivity().refreshList();
+                    }
+                });
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        }
 
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.editText),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.support.constraint.ConstraintLayout")),
-                                        0),
-                                1),
-                        isDisplayed()));
-        appCompatEditText2.perform(replaceText("tes"), closeSoftKeyboard());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
-        ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.SaveNoteButton), withText("Create Note"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        appCompatButton2.perform(click());
-
-
-        DataInteraction constraintLayout = onData(anything())
-                .inAdapterView(allOf(withId(R.id.node_list),
-                        childAtPosition(
-                                withClassName(is("android.support.constraint.ConstraintLayout")),
-                                0)))
-                .atPosition(0);
-        constraintLayout.perform(longClick());
-
-        ViewInteraction actionMenuItemView = onView(
-                allOf(withId(R.id.action_cancel),
-                        isDisplayed()));
-        actionMenuItemView.perform(click());
-
-       onView(withId(R.id.export_checkbox)).check(matches(not(isDisplayed())));
-
+        Assert.assertTrue(count_notes < DataProvider.getInstance().getNotes().size());
 
     }
+
+
+
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {

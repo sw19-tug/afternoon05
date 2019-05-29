@@ -2,8 +2,10 @@ package com.example.afternoon5;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -35,10 +37,18 @@ import android.widget.Toast;
 import com.example.afternoon5.HelperClasses.Note;
 import com.example.afternoon5.HelperClasses.list_adapter;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -178,6 +188,30 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    public void importNote(MenuItem menuItem) {
+
+        isExternalStorageWritable();
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+
+            intent.setType("*/*");
+
+            startActivityForResult(intent, 42);
+
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent resultData) {
+
+        if (requestCode == 42 && resultCode == Activity.RESULT_OK) {
+
+            Uri uri = null;
+            if (resultData != null) {
+                uri = resultData.getData();
+                DataProvider.getInstance().unzipFileAndSaveNotes(uri, this);
+            }
+        }
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

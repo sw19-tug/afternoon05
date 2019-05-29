@@ -36,6 +36,12 @@
         </menu>
 
     </item>
+    <item
+        android:id="@+id/action_import"
+        android:onClick="importNote"
+        android:title="@string/import_menu"
+        />
+
 
     <!-- Settings, should always be in the overflow -->
 

@@ -25,7 +25,7 @@ public class LanguageTest {
     public void checkDisplayedLanguage() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
-        String stringToTest = appContext.getString(R.string.night_mode);
+        String stringToTest = appContext.getString(R.string.alphabetical);
         String testString = "";
 
 
@@ -33,9 +33,9 @@ public class LanguageTest {
         String language = local.getDisplayLanguage();
         if (language.equals(local.getDisplayLanguage(Locale.GERMAN)) ||
                 language.equals(local.getDisplayLanguage(Locale.GERMANY))) {
-            testString = "darkmode";
+            testString = "Alphabetisch";
         } else if (language.equals(local.getDisplayLanguage(Locale.ENGLISH))) {
-            testString = "darkmode";
+            testString = "alphabetical";
         } else {
             assertTrue("device language not known", true);
         }

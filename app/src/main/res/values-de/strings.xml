@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">NOTE</string>
+    <string name="delete_icon">Löschen</string>
+    <string name="export_icon">Exportieren</string>
+    <string name="toast_export">Exportieren erfolgreich</string>
+
+    <string name="sort_options_prompt">Sortieren auswählen</string>
+    <string name="alphabetical">Alphabetisch</string>
+    <string name="creation_date">Erstellungsdatum</string>
+    <string name="storting_menue">Sortieren</string>
+    <string name="share_icon" />
+    <string name="import_menu">importieren</string>
+
+    <string-array name="sort_options">
+        <item>Sortieren nach Titel</item>
+        <item>Sortieren nach Erstellungsdatum</item>
+        <item>Unsortiert</item>
+    </string-array>
+
+
+</resources>

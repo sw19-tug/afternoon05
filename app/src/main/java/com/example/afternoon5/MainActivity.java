@@ -295,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sortList(int item_id) {
+
         Comparator<Note> m_list_gradation;
         switch (item_id) {
             case R.id.sort_creation_date:
@@ -320,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
 
         Collections.sort(DataProvider.getInstance().getNotes(), m_list_gradation);
         adapter.notifyDataSetChanged();
+        refreshList();
     }
 
     @Override

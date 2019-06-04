@@ -26,6 +26,7 @@ import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.PositionAssertions.isAbove;
 import static android.support.test.espresso.assertion.PositionAssertions.isBelow;
+import static android.support.test.espresso.assertion.PositionAssertions.isCompletelyAbove;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -50,13 +51,12 @@ public class NoteSortingEspressoTest {
     private final int SPINNER_SELECTABLE_SORT_BY_CREATION_DATE = R.string.creation_date;
 
     @Before
-    public void setup()
-    {
+    public void setup() {
         DataProvider.getInstance().setNotes(new ArrayList<>());
     }
+
     @After
-    public void clean()
-    {
+    public void clean() {
         DataProvider.getInstance().setNotes(new ArrayList<>());
     }
 
@@ -88,11 +88,9 @@ public class NoteSortingEspressoTest {
         addTestNotes("C" + TITLE, "C" + TEXT);
         addTestNotes("B" + TITLE, "B" + TEXT);
         addTestNotes("A" + TITLE, "A" + TEXT);
-        addTestNotes("E" + TITLE, "E" + TEXT);
-        addTestNotes("D" + TITLE, "D" + TEXT);
+        //addTestNotes("E" + TITLE, "E" + TEXT);
+        //addTestNotes("D" + TITLE, "D" + TEXT);
     }
-
-
 
 
     @Test
@@ -128,16 +126,15 @@ public class NoteSortingEspressoTest {
         setSortMode(SPINNER_SELECTABLE_SORT_BY_TITLE);
         addTestNodes();
         setSortMode(SPINNER_SELECTABLE_SORT_BY_CREATION_DATE);
-
-        onView(withText("C" + TITLE)).perform(scrollTo()).check(isAbove(withText("B" + TITLE)));
-        onView(withText("B" + TITLE)).perform(scrollTo()).check(isAbove(withText("A" + TITLE)));
-        onView(withText("A" + TITLE)).perform(scrollTo()).check(isAbove(withText("E" + TITLE)));
-        onView(withText("E" + TITLE)).perform(scrollTo()).check(isAbove(withText("D" + TITLE)));
+        onView(withText("C" + TITLE)).perform(scrollTo()).check(isCompletelyAbove(withText("B" + TITLE)));
+        onView(withText("B" + TITLE)).perform(scrollTo()).check(isCompletelyAbove(withText("A" + TITLE)));
+        onView(withText("C" + TITLE)).perform(scrollTo()).check(isCompletelyAbove(withText("A" + TITLE)));
 
     }
 
     @Test
     public void testAddNoteCreationDatedMode() {
+        clean();
         setSortMode(SPINNER_SELECTABLE_SORT_BY_CREATION_DATE);
 
         addTestNotes("I" + TITLE, "I" + TEXT);
@@ -151,6 +148,7 @@ public class NoteSortingEspressoTest {
 
     @Test
     public void testAddNoteSortByTitleMode() {
+        clean();
         setSortMode(SPINNER_SELECTABLE_SORT_BY_TITLE);
 
         addTestNotes("L" + TITLE, TEXT);

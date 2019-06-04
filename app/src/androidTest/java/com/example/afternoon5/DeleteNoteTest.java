@@ -119,7 +119,7 @@ public class DeleteNoteTest {
         constraintLayout.perform(click());
 
         ViewInteraction actionMenuItemView = onView(
-                allOf(withId(R.id.action_delete), withContentDescription("Delete"),
+                allOf(withId(R.id.action_delete), withContentDescription(R.string.delete_icon),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.action_bar),

@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#d9d9db"
-    android:color="#b2b0b0"
+    android:background="@color/colorBackground"
     tools:context=".CreateNoteActivity">
 
     <android.support.constraint.ConstraintLayout
@@ -17,6 +16,7 @@
         android:layout_marginBottom="24dp"
         android:background="@drawable/create_note_box"
         android:paddingBottom="10dp"
+        android:backgroundTint="@color/colorNoteBackground"
         app:layout_constraintBottom_toTopOf="@+id/SaveNoteButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

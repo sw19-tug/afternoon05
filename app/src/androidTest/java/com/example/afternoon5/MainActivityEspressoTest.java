@@ -22,6 +22,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -62,12 +64,13 @@ public class MainActivityEspressoTest {
         final String TITLE = "veryUniqueTestingStringOne";
         final String TEXT = "veryUniqueTestingStringTwo";
         final boolean PIN = false;
+        String[] tags = {};
         // When.
         activityTestRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 //activityTestRule.getActivity().addListElement(new note_obj(TITLE, TEXT));
-                DataProvider.getInstance().addNoteToNotes(new Note(TITLE, TEXT, PIN));
+                DataProvider.getInstance().addNoteToNotes(new Note(TITLE, TEXT, tags, PIN));
                 activityTestRule.getActivity().refreshList();
 
             }

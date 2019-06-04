@@ -318,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
     private int getSortingPreference() {
         final SharedPreferences prefs;
         prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        int value = prefs.getInt("spinner value start", R.id.sort_alphabetical);
+        int value = prefs.getInt("spinner value start", R.id.sort_pinned);
         return value;
     }
 

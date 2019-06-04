@@ -32,6 +32,8 @@
                     android:title="@string/alphabetical" />
                 <item android:id="@+id/sort_creation_date"
                     android:title="@string/creation_date" />
+                <item android:id="@+id/sort_pinned"
+                    android:title="@string/pinned" />
             </group>
         </menu>
 

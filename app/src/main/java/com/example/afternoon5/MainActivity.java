@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id != R.id.sort_alphabetical && id != R.id.sort_creation_date) {
+        if (id != R.id.sort_alphabetical && id != R.id.sort_creation_date && id != R.id.sort_pinned) {
             return super.onOptionsItemSelected(item);
         }
 
@@ -212,17 +212,13 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < list.getCount(); i++) {
             View view1 = list.getChildAt(i);
             if (((CheckBox) view1.findViewById(R.id.checkBox2)).isChecked())
-
             {
                 int number = i;
                 String numberAsString = Integer.toString(number);
                 Log.d("Meine_ID", numberAsString);
                 ArrayList <Note> old_notes = DataProvider.getInstance().getNotes();
                 old_notes.get(i).setPinn(true);
-
-
             }
-
             else
             {
                 ArrayList <Note> old_notes = DataProvider.getInstance().getNotes();
@@ -230,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         DataProvider.getInstance().save(this);
+        sortList(getSortingPreference());
     }
 
 
@@ -281,6 +278,26 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public int compare(Note o1, Note o2) {
                         return o1.getTitle().compareTo(o2.getTitle());
+                    }
+                };
+                break;
+            case R.id.sort_pinned:
+                m_list_gradation = new Comparator<Note>() {
+                    @Override
+                    public int compare(Note o1, Note o2) {
+                        if (o1.getPinn() && o2.getPinn())
+                        {
+                            return 0;
+                        }
+                        if (o1.getPinn())
+                        {
+                            return -1;
+                        }
+                        else
+                        {
+                          return 1;
+                        }
+
                     }
                 };
                 break;

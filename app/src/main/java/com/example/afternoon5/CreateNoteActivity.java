@@ -1,8 +1,7 @@
 package com.example.afternoon5;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.provider.ContactsContract;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,15 +9,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.afternoon5.HelperClasses.Note;
-import com.google.gson.Gson;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Arrays;
 
 
 public class CreateNoteActivity extends AppCompatActivity {
@@ -35,6 +29,23 @@ public class CreateNoteActivity extends AppCompatActivity {
         MultiAutoCompleteTextView textView = findViewById(R.id.tagsTextView);
         textView.setAdapter(adapter);
         textView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+
+
+        //Go Back on Android Logo Label Click
+        ActionBar act_bar = getSupportActionBar();
+        if (act_bar != null) {
+            act_bar.setDisplayShowTitleEnabled(false);
+            act_bar.setDisplayShowCustomEnabled(true);
+
+            View toolbarView = getLayoutInflater().inflate(R.layout.toolbar_custom, null);
+            TextView title_bar = toolbarView.findViewById(R.id.toolbar_title);
+
+
+            Intent mainIntent = new Intent(CreateNoteActivity.this, MainActivity.class);
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            title_bar.setOnClickListener(v -> this.startActivity(mainIntent));
+            act_bar.setCustomView(toolbarView);
+        }
 
     }
 

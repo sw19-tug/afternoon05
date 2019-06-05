@@ -10,6 +10,8 @@
     <string name="import_menu">importieren</string>
     <string name="night_mode">Nachtmodus</string>
 
+    <string name="search_title">Suchen</string>
+
     <string-array name="sort_options">
         <item>Sortieren nach Titel</item>
         <item>Sortieren nach Erstellungsdatum</item>

@@ -308,6 +308,7 @@ public class MainActivity extends AppCompatActivity {
 
         Collections.sort(DataProvider.getInstance().getNotes(), m_list_gradation);
         adapter.notifyDataSetChanged();
+        refreshList();
     }
     @Override
     protected void onResume() {

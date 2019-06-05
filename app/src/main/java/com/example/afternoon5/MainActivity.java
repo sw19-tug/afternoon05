@@ -53,7 +53,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 
-public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private list_adapter adapter;
 
 
@@ -352,6 +352,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onQueryTextChange(String s) {
         adapter.filter(s);
+        ((ListView) findViewById(R.id.node_list)).invalidateViews();
         return true;
     }
 }

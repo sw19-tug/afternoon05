@@ -8,8 +8,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.afternoon5.HelperClasses.Note;
+import com.example.afternoon5.MainActivity;
 import com.example.afternoon5.R;
 
 import java.lang.reflect.Array;
@@ -87,34 +89,26 @@ public class list_adapter extends BaseAdapter {
 
     }
 
-    public void filter(String queryText)
-    {
+    public void filter(String queryText) {
 
         pairs.clear();
 
-        if(queryText.isEmpty())
-        {
+        if (queryText.isEmpty()) {
             pairs.addAll(copyPairs);
-        }
-        else
-        {
+        } else {
 
-            for(Note note: copyPairs)
-            {
-                if(note.getTitle().toLowerCase().contains(queryText.toLowerCase()))
-                {
+            for (Note note : copyPairs) {
+                if (note.getTitle().toLowerCase().contains(queryText.toLowerCase())) {
                     pairs.add(note);
                     continue;
                 }
-                if(note.getText().toLowerCase().contains(queryText.toLowerCase()))
-                {
+                if (note.getText().toLowerCase().contains(queryText.toLowerCase())) {
                     pairs.add(note);
                 }
 
             }
 
         }
-
         notifyDataSetChanged();
     }
 

@@ -9,6 +9,8 @@
     <string name="storting_menue">Sortieren</string>
     <string name="import_menu">importieren</string>
     <string name="night_mode">Nachtmodus</string>
+    <string name="pinned">Favorit</string>
+    <string name="share_icon" />
 
     <string-array name="sort_options">
         <item>Sortieren nach Titel</item>

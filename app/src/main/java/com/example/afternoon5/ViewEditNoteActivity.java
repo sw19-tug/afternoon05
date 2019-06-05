@@ -21,11 +21,13 @@ import android.widget.TextView;
 
 
 import com.example.afternoon5.HelperClasses.Note;
+import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
+import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
 import java.util.ArrayList;
 
 public class ViewEditNoteActivity extends AppCompatActivity {
-    private static final String EXTRA_MESSAGE ="extra";
+    private static final String EXTRA_MESSAGE = "extra";
     private static Note objectToEdit;
     private int position;
 
@@ -98,8 +100,7 @@ public class ViewEditNoteActivity extends AppCompatActivity {
         safeAndCallMainActivity();
     }
 
-    private void safeAndCallMainActivity()
-    {
+    private void safeAndCallMainActivity() {
         final TextView editNote = (TextView) this.findViewById(R.id.editNote);
         final TextView Title = (TextView) this.findViewById(R.id.Title);
         final MultiAutoCompleteTextView tags = (MultiAutoCompleteTextView) this.findViewById(R.id.editTagsTextView);
@@ -107,11 +108,10 @@ public class ViewEditNoteActivity extends AppCompatActivity {
         DataProvider.getInstance().getNotes().get(position).setTitle(Title.getText().toString());
         String tagString = tags.getText().toString();
         tagString = tagString.replaceAll(" ", "");
-        if(tagString.endsWith(","))
-        {
-            tagString = tagString.substring(0, tagString.length()-1);
+        if (tagString.endsWith(",")) {
+            tagString = tagString.substring(0, tagString.length() - 1);
         }
-        String[] tagsArray =tagString.split(",");
+        String[] tagsArray = tagString.split(",");
 
 
         DataProvider.getInstance().getNotes().get(position).setTags(tagsArray);
@@ -135,7 +135,17 @@ public class ViewEditNoteActivity extends AppCompatActivity {
             deleteNoteDialogFragment.show(getSupportFragmentManager(), "DeleteNoteDialogFragment");
 
             return true;
+        } else if (id == R.id.action_change_color){
+            final ColorPicker cp = new ColorPicker(ViewEditNoteActivity.this);
+            cp.setCallback(new ColorPickerCallback() {
+                @Override
+                public void onColorChosen(int color) {
+                    int selected_color = cp.getColor();
+                }
+            });
+
         }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -149,7 +159,7 @@ public class ViewEditNoteActivity extends AppCompatActivity {
                     .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int id) {
                             // FIRE ZE MISSILES!
-                            Dialog dialog  = (Dialog) dialogInterface;
+                            Dialog dialog = (Dialog) dialogInterface;
                             Context context = dialog.getContext();
                             DataProvider.getInstance().getNotes().remove(objectToEdit);
                             DataProvider.getInstance().save(context);

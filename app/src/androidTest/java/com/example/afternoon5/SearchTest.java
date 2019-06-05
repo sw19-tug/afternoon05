@@ -128,11 +128,10 @@ public class SearchTest {
         appCompatButton2.perform(click());
 
         ViewInteraction actionMenuItemView = onView(
-                allOf(withId(R.id.search), withContentDescription("Search"),
+                allOf(withId(R.id.search), withContentDescription(R.string.search_title),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.action_bar),
-                                        1),
+                                        withId(R.id.action_bar),1),
                                 0),
                         isDisplayed()));
         actionMenuItemView.perform(click());
@@ -239,12 +238,7 @@ public class SearchTest {
         appCompatButton2.perform(click());
 
         ViewInteraction actionMenuItemView = onView(
-                allOf(withId(R.id.search), withContentDescription("Search"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.action_bar),
-                                        1),
-                                0),
+                allOf(withId(R.id.search),
                         isDisplayed()));
         actionMenuItemView.perform(click());
 
@@ -262,13 +256,7 @@ public class SearchTest {
         onView(withId(R.id.node_list)).check(ViewAssertions.matches (Matchers.withListSize (0)));
 
         ViewInteraction appCompatImageView = onView(
-                allOf(withId(R.id.search_close_btn), withContentDescription("Clear query"),
-                        childAtPosition(
-                                allOf(withId(R.id.search_plate),
-                                        childAtPosition(
-                                                withId(R.id.search_edit_frame),
-                                                1)),
-                                1),
+                allOf(withId(R.id.search_close_btn),
                         isDisplayed()));
         appCompatImageView.perform(click());
         onView(withId(R.id.node_list)).check(ViewAssertions.matches (Matchers.withListSize (2)));

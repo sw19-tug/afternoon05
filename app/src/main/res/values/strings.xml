@@ -9,7 +9,10 @@
     <string name="creation_date">creation date</string>
     <string name="storting_menue">sorting</string>
     <string name="share_icon" />
+
     <string name="pinned">pinned</string>
+    <string name="import_menu">import</string>
+    <string name="night_mode">nightmode</string>
 
     <string-array name="sort_options">
         <item>Sort by Title</item>

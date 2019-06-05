@@ -2,6 +2,7 @@ package com.example.afternoon5;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
@@ -9,15 +10,19 @@ import com.example.afternoon5.HelperClasses.Note;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 class DataProvider {
@@ -165,6 +170,53 @@ class DataProvider {
         return file;
 
     }
+
+    public void unzipFileAndSaveNotes(Uri uri, Context context)
+    {
+        InputStream is;
+        ZipInputStream zis;
+        try
+        {
+
+            is = context.getContentResolver().openInputStream(uri);
+            zis = new ZipInputStream(new BufferedInputStream(is));
+            ZipEntry ze;
+
+            while((ze = zis.getNextEntry()) != null)
+            {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int count;
+
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream( );
+
+                while((count = zis.read(buffer)) != -1)
+                {
+                    baos.write(buffer, 0, count);
+                    byte[] bytes = baos.toByteArray();
+                    outputStream.write(bytes);
+                    baos.reset();
+                }
+                String str =  new String(outputStream.toByteArray(), "UTF-8");
+                Gson gson = new Gson();
+
+                Note note = gson.fromJson(str,
+                        new TypeToken<Note>() {
+                        }.getType());
+                notes.add(note);
+
+                zis.closeEntry();
+            }
+            save(context);
+            zis.close();
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+
+        }
+    }
+
 
 
 

@@ -2,8 +2,10 @@ package com.example.afternoon5;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -13,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,12 +34,20 @@ import android.widget.Toast;
 import com.example.afternoon5.HelperClasses.Note;
 import com.example.afternoon5.HelperClasses.list_adapter;
 
-import org.w3c.dom.Node;
 
+import org.w3c.dom.Node;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -54,8 +65,11 @@ public class MainActivity extends AppCompatActivity {
         int spinner_value = getSortingPreference();
         Menu submenue = checkable_menue.getSubMenu();
         MenuItem sort_option = submenue.findItem(spinner_value);
+        if (sort_option != null)
+            sort_option.setChecked(true);
 
-        sort_option.setChecked(true);
+        MenuItem checkable_nightmode = menu.findItem(R.id.action_nightmode_toggle);
+        checkable_nightmode.setChecked(getNightModefromPrefs());
         return true;
     }
 
@@ -78,10 +92,9 @@ public class MainActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int pos, long id) {
 
-                for (int i = 0; i < list.getCount(); i++)
-                {
+                for (int i = 0; i < list.getCount(); i++) {
 
-                    View view1  = list.getChildAt(i);
+                    View view1 = list.getChildAt(i);
                     view1.findViewById(R.id.export_checkbox).setVisibility(View.VISIBLE);
 
                 }
@@ -93,25 +106,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
         list.setOnItemClickListener((parent, view, position, id) -> {
 
             Intent intent = new Intent(getBaseContext(), ViewEditNoteActivity.class);
-            intent.putExtra("position" ,position);
+            intent.putExtra("position", position);
             startActivity(intent);
-
         });
 
         sortList(getSortingPreference());
-
+        setNightmode(getNightModefromPrefs());
     }
 
 
     public void closeExport(MenuItem menuItem) {
         final ListView list = (ListView) findViewById(R.id.node_list);
-        for (int i = 0; i < list.getCount(); i++)
-        {
-            View view1  = list.getChildAt(i);
+        for (int i = 0; i < list.getCount(); i++) {
+            View view1 = list.getChildAt(i);
             view1.findViewById(R.id.export_checkbox).setVisibility(View.GONE);
         }
         menu.findItem(R.id.action_export).setVisible(false);
@@ -125,18 +135,16 @@ public class MainActivity extends AppCompatActivity {
 
         final ListView list = (ListView) findViewById(R.id.node_list);
         ArrayList<Note> listtoShare = new ArrayList<>();
-        for (int i = 0; i < list.getCount(); i++)
-        {
-            View view1  = list.getChildAt(i);
-            if (((CheckBox)view1.findViewById(R.id.export_checkbox)).isChecked())
+        for (int i = 0; i < list.getCount(); i++) {
+            View view1 = list.getChildAt(i);
+            if (((CheckBox) view1.findViewById(R.id.export_checkbox)).isChecked())
                 listtoShare.add(DataProvider.getInstance().getNotes().get(i));
         }
 
 
         StringBuilder share_text = new StringBuilder("");
 
-        for (Note note : listtoShare)
-        {
+        for (Note note : listtoShare) {
             share_text.append("Titel: ");
             share_text.append(note.getTitle());
             share_text.append("\n");
@@ -145,8 +153,8 @@ public class MainActivity extends AppCompatActivity {
             share_text.append(note.getTagsAsStringHashes());
             share_text.append("\n\n");
         }
-        if(share_text.length() >= 3)
-            share_text.delete(share_text.length()-3, share_text.length());
+        if (share_text.length() >= 3)
+            share_text.delete(share_text.length() - 3, share_text.length());
 
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -159,14 +167,12 @@ public class MainActivity extends AppCompatActivity {
     public void exportSelectedNotes(MenuItem menuItem) {
         final ListView list = (ListView) findViewById(R.id.node_list);
         ArrayList<Note> listtoExport = new ArrayList<>();
-        for (int i = 0; i < list.getCount(); i++)
-        {
-            View view1  = list.getChildAt(i);
-            if (((CheckBox)view1.findViewById(R.id.export_checkbox)).isChecked())
+        for (int i = 0; i < list.getCount(); i++) {
+            View view1 = list.getChildAt(i);
+            if (((CheckBox) view1.findViewById(R.id.export_checkbox)).isChecked())
                 listtoExport.add(DataProvider.getInstance().getNotes().get(i));
         }
-        if(isExternalStorageWritable())
-        {
+        if (isExternalStorageWritable()) {
             DataProvider.getInstance().exportToExternalStorage(listtoExport);
         }
 
@@ -176,6 +182,57 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    public void importNote(MenuItem menuItem) {
+
+        isExternalStorageWritable();
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+
+        intent.setType("*/*");
+
+        startActivityForResult(intent, 42);
+
+    }
+
+    public void nightmodeSelected(MenuItem menuItem) {
+        boolean isChecked = !menuItem.isChecked();
+        menuItem.setChecked(isChecked);
+
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        prefs.edit().putBoolean("nightmode_enabled", isChecked).apply();
+        setNightmode(isChecked);
+    }
+
+    private void setNightmode(final boolean nightmode_enabled) {
+
+        final int nightmode = nightmode_enabled ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
+        if (AppCompatDelegate.getDefaultNightMode() != nightmode) {
+            AppCompatDelegate.setDefaultNightMode(nightmode);
+            recreate();
+        }
+    }
+
+    private boolean getNightModefromPrefs() {
+        final SharedPreferences prefs;
+        prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        return prefs.getBoolean("nightmode_enabled", false);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent resultData) {
+
+        if (requestCode == 42 && resultCode == Activity.RESULT_OK) {
+
+            Uri uri = null;
+            if (resultData != null) {
+                uri = resultData.getData();
+                DataProvider.getInstance().unzipFileAndSaveNotes(uri, this);
+            }
+        }
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -232,9 +289,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void refreshList() {
-    final ListView list = findViewById(R.id.node_list);
-    final list_adapter adapter = new list_adapter(this,DataProvider.getInstance().getNotes());
-    list.setAdapter(adapter);
+        final ListView list = findViewById(R.id.node_list);
+        final list_adapter adapter = new list_adapter(this, DataProvider.getInstance().getNotes());
+        list.setAdapter(adapter);
     }
 
     public boolean isExternalStorageWritable() {
@@ -263,6 +320,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void sortList(int item_id) {
+
         Comparator<Note> m_list_gradation;
         switch (item_id) {
             case R.id.sort_creation_date:
@@ -310,6 +368,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         refreshList();
     }
+
     @Override
     protected void onResume() {
         super.onResume();

@@ -38,6 +38,18 @@
         </menu>
 
     </item>
+    <item
+        android:id="@+id/action_nightmode_toggle"
+        android:checkable="true"
+        android:onClick="nightmodeSelected"
+        android:title="@string/night_mode"
+        />
+    <item
+        android:id="@+id/action_import"
+        android:onClick="importNote"
+        android:title="@string/import_menu"
+        />
+
 
     <!-- Settings, should always be in the overflow -->
 

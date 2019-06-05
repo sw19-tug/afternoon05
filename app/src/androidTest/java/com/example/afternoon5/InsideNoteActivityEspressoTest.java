@@ -33,14 +33,13 @@ public class InsideNoteActivityEspressoTest {
     public IntentsTestRule<MainActivity> activityTestRule = new IntentsTestRule<>(MainActivity.class);
 
 
-    public void createNewListElement(final String node_title, final String node_text) throws Throwable {
+    public void createNewListElement(final String node_title, final String node_text, final boolean pinned) throws Throwable {
         //add new List element, set title and text of node of the new node
         activityTestRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 //activityTestRule.getActivity().addListElement(new Note(node_title, node_text));
-
-                DataProvider.getInstance().addNoteToNotes(new Note(node_title, node_text, new Date()));
+                DataProvider.getInstance().addNoteToNotes(new Note(node_title, node_text, pinned, new Date()));
                 activityTestRule.getActivity().refreshList();
             }
         });
@@ -52,8 +51,9 @@ public class InsideNoteActivityEspressoTest {
 
         final String node_title = "new_node_title_01";
         final String node_text = "new_node_text_01";
+        final boolean pinned = false;
 
-        createNewListElement(node_title, node_text);
+        createNewListElement(node_title, node_text, pinned);
 
         //Check if displayed on MainActivity
         onView(withText(node_title)).check(matches(isDisplayed()));
@@ -71,10 +71,11 @@ public class InsideNoteActivityEspressoTest {
         DataProvider.getInstance().setNotes(new ArrayList<>());
         final String node_title = "new_node_title_02";
         final String node_text = "new_node_text_02";
+        final boolean pinned = false;
 
         //Activity: MainActivity
 
-        createNewListElement(node_title, node_text);
+        createNewListElement(node_title, node_text, pinned);
 
         //Click on the new Node to get into the InsideNodeView Activity, where you are able to see and edit the node
         onView(withText(node_title)).perform(click());
@@ -98,10 +99,11 @@ public class InsideNoteActivityEspressoTest {
 
         final String node_title = "new_node_title_03";
         final String node_text = "new_node_text_03";
+        final boolean pinned = false;
 
         //Activity: MainActivity
 
-        createNewListElement(node_title, node_text);
+        createNewListElement(node_title, node_text, pinned);
 
         //Click on the new Node to get into the InsideNodeView Activity, where you are able to see and edit the node
         onView(withText(node_title)).perform(click());

@@ -27,7 +27,7 @@
 
     <TextView
         android:id="@+id/note_title"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
         android:layout_marginStart="8dp"
@@ -35,48 +35,50 @@
         android:layout_marginEnd="8dp"
         android:text="Hello World!"
         android:textSize="20sp"
+
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/checkBox2"
-        app:layout_constraintStart_toEndOf="@+id/export_checkbox"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/note_text"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:text="Hello World!"
         app:layout_constraintEnd_toStartOf="@+id/checkBox2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/export_checkbox"
         app:layout_constraintTop_toBottomOf="@+id/note_title" />
 
     <TextView
         android:id="@+id/note_tags"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:paddingTop="5sp"
         android:text="Hello World!"
         android:textSize="10sp"
         app:layout_constraintEnd_toStartOf="@+id/checkBox2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/export_checkbox"
         app:layout_constraintTop_toBottomOf="@+id/note_text" />
 
     <CheckBox
         android:id="@+id/checkBox2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        style="?android:attr/starStyle"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:button="@android:drawable/star_big_off"
-        android:gravity="right"
+        android:onClick="onCheckboxClicked"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

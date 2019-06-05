@@ -26,11 +26,7 @@ import android.widget.AdapterView;
 
 import android.support.v7.widget.Toolbar;
 
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -38,6 +34,8 @@ import android.widget.Toast;
 import com.example.afternoon5.HelperClasses.Note;
 import com.example.afternoon5.HelperClasses.list_adapter;
 
+
+import org.w3c.dom.Node;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -239,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id != R.id.sort_alphabetical && id != R.id.sort_creation_date) {
+        if (id != R.id.sort_alphabetical && id != R.id.sort_creation_date && id != R.id.sort_pinned) {
             return super.onOptionsItemSelected(item);
         }
 
@@ -261,6 +259,33 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+
+
+    public void onCheckboxClicked(View view)
+    {
+        final ListView list = (ListView) findViewById(R.id.node_list);
+        Note newNote = new Note();
+
+        for (int i = 0; i < list.getCount(); i++) {
+            View view1 = list.getChildAt(i);
+            if (((CheckBox) view1.findViewById(R.id.checkBox2)).isChecked())
+            {
+                int number = i;
+                String numberAsString = Integer.toString(number);
+                Log.d("Meine_ID", numberAsString);
+                ArrayList <Note> old_notes = DataProvider.getInstance().getNotes();
+                old_notes.get(i).setPinn(true);
+            }
+            else
+            {
+                ArrayList <Note> old_notes = DataProvider.getInstance().getNotes();
+                old_notes.get(i).setPinn(false);
+            }
+        }
+        DataProvider.getInstance().save(this);
+        sortList(getSortingPreference());
+    }
+
 
 
     public void refreshList() {
@@ -314,6 +339,26 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
                 break;
+            case R.id.sort_pinned:
+                m_list_gradation = new Comparator<Note>() {
+                    @Override
+                    public int compare(Note o1, Note o2) {
+                        if (o1.getPinn() && o2.getPinn())
+                        {
+                            return 0;
+                        }
+                        if (o1.getPinn())
+                        {
+                            return -1;
+                        }
+                        else
+                        {
+                          return 1;
+                        }
+
+                    }
+                };
+                break;
             default:
                 return;
         }
@@ -333,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
     private int getSortingPreference() {
         final SharedPreferences prefs;
         prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        int value = prefs.getInt("spinner value start", R.id.sort_alphabetical);
+        int value = prefs.getInt("spinner value start", R.id.sort_pinned);
         return value;
     }
 

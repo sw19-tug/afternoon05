@@ -45,6 +45,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         String title = ((EditText)findViewById(R.id.editTitle)).getText().toString();
         String text = ((EditText)findViewById(R.id.editText)).getText().toString();
         String tagString = ((MultiAutoCompleteTextView)findViewById(R.id.tagsTextView)).getText().toString();
+        boolean pinned = false;
 
         if(title.isEmpty() || text.isEmpty())
         {
@@ -58,7 +59,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             tagString = tagString.substring(0, tagString.length()-1);
         }
         String[] tags =tagString.split(",");
-        DataProvider.getInstance().addNoteToNotes(new Note(title, text, tags));
+        DataProvider.getInstance().addNoteToNotes(new Note(title, text, tags, pinned));
 
         DataProvider.getInstance().save(this);
 

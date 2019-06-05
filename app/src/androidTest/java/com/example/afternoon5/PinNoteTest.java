@@ -16,6 +16,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -38,6 +40,7 @@ public class PinNoteTest {
 
     @Test
     public void pinNoteTest() {
+        DataProvider.getInstance().setNotes(new ArrayList<>());
         ViewInteraction floatingActionButton = onView(
                 allOf(withId(R.id.createNoteButton),
                         childAtPosition(
@@ -56,19 +59,9 @@ public class PinNoteTest {
                                         0),
                                 0),
                         isDisplayed()));
-        appCompatEditText.perform(click());
+        appCompatEditText.perform(replaceText("a"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.editTitle),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.support.constraint.ConstraintLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText2.perform(replaceText("a"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText3 = onView(
                 allOf(withId(R.id.editText),
                         childAtPosition(
                                 childAtPosition(
@@ -76,7 +69,7 @@ public class PinNoteTest {
                                         0),
                                 1),
                         isDisplayed()));
-        appCompatEditText3.perform(replaceText("a"), closeSoftKeyboard());
+        appCompatEditText2.perform(replaceText("a"), closeSoftKeyboard());
 
         //pressBack();
 
@@ -90,64 +83,8 @@ public class PinNoteTest {
                         isDisplayed()));
         appCompatButton.perform(click());
 
-        ViewInteraction floatingActionButton2 = onView(
-                allOf(withId(R.id.createNoteButton),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        floatingActionButton2.perform(click());
-
-        ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.editTitle),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.support.constraint.ConstraintLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText4.perform(click());
-
-        ViewInteraction appCompatEditText5 = onView(
-                allOf(withId(R.id.editTitle),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.support.constraint.ConstraintLayout")),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatEditText5.perform(replaceText("b"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText6 = onView(
-                allOf(withId(R.id.editText),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.support.constraint.ConstraintLayout")),
-                                        0),
-                                1),
-                        isDisplayed()));
-        appCompatEditText6.perform(replaceText("b"), closeSoftKeyboard());
-
-        //pressBack();
-
-        ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.SaveNoteButton), withText("Create Note"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        appCompatButton2.perform(click());
-
         ViewInteraction appCompatCheckBox = onView(
                 allOf(withId(R.id.checkBox2),
-                        childAtPosition(
-                                allOf(withId(R.id.linearLayout2),
-                                        withParent(withId(R.id.node_list))),
-                                4),
                         isDisplayed()));
         appCompatCheckBox.perform(click());
     }

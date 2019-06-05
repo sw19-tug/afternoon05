@@ -12,6 +12,8 @@
     <string name="import_menu">import</string>
     <string name="night_mode">nightmode</string>
 
+    <string name="search_title">Search</string>
+
     <string-array name="sort_options">
         <item>Sort by Title</item>
         <item>Sort by Creation Date</item>

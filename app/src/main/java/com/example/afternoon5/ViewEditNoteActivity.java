@@ -75,6 +75,22 @@ public class ViewEditNoteActivity extends AppCompatActivity {
                 safeAndCallMainActivity();
             }
         });
+
+        //Go Back on Android Logo Label Click
+        ActionBar act_bar = getSupportActionBar();
+        if (act_bar != null) {
+            act_bar.setDisplayShowTitleEnabled(false);
+            act_bar.setDisplayShowCustomEnabled(true);
+
+            View toolbarView = getLayoutInflater().inflate(R.layout.toolbar_custom, null);
+            TextView title_bar = toolbarView.findViewById(R.id.toolbar_title);
+
+            Intent mainIntent = new Intent(ViewEditNoteActivity.this, MainActivity.class);
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            title_bar.setOnClickListener(v -> this.startActivity(mainIntent));
+            act_bar.setCustomView(toolbarView);
+        }
+
     }
 
     @Override

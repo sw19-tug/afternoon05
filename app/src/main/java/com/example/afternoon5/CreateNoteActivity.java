@@ -109,13 +109,11 @@ public class CreateNoteActivity extends AppCompatActivity {
             toast.show();
             return;
         }
-        tagString = tagString.replaceAll(" ", "");
-        if(tagString.endsWith(","))
-        {
-            tagString = tagString.substring(0, tagString.length()-1);
-        }
-        String[] tags =tagString.split(",");
+       
+        tagString = tagString.replaceAll("#", " ");
 
+        String[] tags = tagString.split(" ");
+      
 
         Switch onOffSwitch = (Switch)  findViewById(R.id.geoTagSwitch);
         String location ="";
@@ -130,6 +128,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
 
         DataProvider.getInstance().addNoteToNotes(new Note(title, text, tags, false, location));
+
 
         DataProvider.getInstance().save(this);
 

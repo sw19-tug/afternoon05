@@ -107,17 +107,17 @@ public class EditTagTest {
         constraintLayout.perform(click());
 
         ViewInteraction appCompatMultiAutoCompleteTextView2 = onView(
-                allOf(withId(R.id.editTagsTextView), withText("test, "),
+                allOf(withId(R.id.editTagsTextView), withText("test"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.support.constraint.ConstraintLayout")),
                                         0),
                                 2),
                         isDisplayed()));
-        appCompatMultiAutoCompleteTextView2.perform(replaceText("testtest "));
+        appCompatMultiAutoCompleteTextView2.perform(replaceText("testtest"));
 
         ViewInteraction appCompatMultiAutoCompleteTextView3 = onView(
-                allOf(withId(R.id.editTagsTextView), withText("testtest "),
+                allOf(withId(R.id.editTagsTextView), withText("testtest"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.support.constraint.ConstraintLayout")),
@@ -139,7 +139,7 @@ public class EditTagTest {
 
         ViewInteraction textView = onView(withId(R.id.note_tags));
 
-        textView.check(matches(withText("testtest, ")));
+        textView.check(matches(withText("#testtest")));
     }
 
     private static Matcher<View> childAtPosition(

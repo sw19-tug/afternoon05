@@ -13,6 +13,7 @@
     <string name="pinned">pinned</string>
     <string name="import_menu">import</string>
     <string name="night_mode">nightmode</string>
+    <string name="change_color">Change color</string>
 
     <string-array name="sort_options">
         <item>Sort by Title</item>

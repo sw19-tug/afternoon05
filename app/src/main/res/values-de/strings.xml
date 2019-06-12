@@ -11,6 +11,7 @@
     <string name="night_mode">Nachtmodus</string>
     <string name="pinned">Favorit</string>
     <string name="share_icon" />
+    <string name="change_color">Farbe verändern</string>
 
     <string-array name="sort_options">
         <item>Sortieren nach Titel</item>

@@ -1,6 +1,8 @@
 package com.example.afternoon5.HelperClasses;
 
 import android.app.Activity;
+import android.content.res.ColorStateList;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,6 +77,8 @@ public class list_adapter extends BaseAdapter {
 
         viewHolder.checkBox2.setChecked(pairs.get(position).getPinn());
 
+        ConstraintLayout NoteElement = (ConstraintLayout)convertView;
+        NoteElement.setBackgroundTintList(ColorStateList.valueOf(pairs.get(position).getColor()));
 
         return convertView;
     }

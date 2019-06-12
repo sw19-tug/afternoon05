@@ -11,10 +11,13 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.afternoon5.HelperClasses.Note;
+import com.example.afternoon5.MainActivity;
 import com.example.afternoon5.R;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -23,11 +26,15 @@ public class list_adapter extends BaseAdapter {
     private Activity context_1;
 
     private ArrayList<Note> pairs;
+    private ArrayList<Note> copyPairs;
 
     public list_adapter(Activity context,
                         ArrayList<Note> pairs) {
         context_1 = context;
         this.pairs = pairs;
+        copyPairs = new ArrayList<>();
+        copyPairs.addAll(pairs);
+
     }
 
     @Override
@@ -92,4 +99,28 @@ public class list_adapter extends BaseAdapter {
         public CheckBox checkBox2; //
 
     }
+
+    public void filter(String queryText) {
+
+        pairs.clear();
+
+        if (queryText.isEmpty()) {
+            pairs.addAll(copyPairs);
+        } else {
+
+            for (Note note : copyPairs) {
+                if (note.getTitle().toLowerCase().contains(queryText.toLowerCase())) {
+                    pairs.add(note);
+                    continue;
+                }
+                if (note.getText().toLowerCase().contains(queryText.toLowerCase())) {
+                    pairs.add(note);
+                }
+
+            }
+
+        }
+        notifyDataSetChanged();
+    }
+
 }

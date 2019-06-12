@@ -1,10 +1,17 @@
 package com.example.afternoon5;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,8 +21,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,14 +33,19 @@ import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
 
+
 public class CreateNoteActivity extends AppCompatActivity {
 
     int selectedColor = Color.WHITE;
 
+    private Activity thisActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_note);
+
+        this.thisActivity = this;
+
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, DataProvider.getInstance().getAllTags());
@@ -56,6 +70,40 @@ public class CreateNoteActivity extends AppCompatActivity {
             act_bar.setCustomView(toolbarView);
         }
 
+        Switch onOffSwitch = (Switch)  findViewById(R.id.geoTagSwitch);
+        onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+               if(isChecked)
+               {
+                   if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                           == PackageManager.PERMISSION_GRANTED) {
+
+                   } else {
+
+                       ActivityCompat.requestPermissions(thisActivity,
+                               new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                               200);
+                   }
+               }
+
+            }
+
+        });
+
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 200: {
+                if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Switch onOffSwitch = (Switch)  findViewById(R.id.geoTagSwitch);
+                    onOffSwitch.setChecked(false);
+                }
+            }
+        }
     }
 
     public void createNote(View view) {
@@ -63,7 +111,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         String title = ((EditText)findViewById(R.id.editTitle)).getText().toString();
         String text = ((EditText)findViewById(R.id.editText)).getText().toString();
         String tagString = ((MultiAutoCompleteTextView)findViewById(R.id.tagsTextView)).getText().toString();
-        boolean pinned = false;
+
 
         if(title.isEmpty() || text.isEmpty())
         {
@@ -71,15 +119,27 @@ public class CreateNoteActivity extends AppCompatActivity {
             toast.show();
             return;
         }
-        tagString = tagString.replaceAll(" ", "");
-        if(tagString.endsWith(","))
-        {
-            tagString = tagString.substring(0, tagString.length()-1);
+       
+        tagString = tagString.replaceAll("#", " ");
+
+        String[] tags = tagString.split(" ");
+      
+
+        Switch onOffSwitch = (Switch)  findViewById(R.id.geoTagSwitch);
+        String location ="";
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            if(onOffSwitch.isChecked()) {
+                LocationManager locationManager = (LocationManager) getSystemService(getApplicationContext().LOCATION_SERVICE);
+                Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                location = locationGPS.getLatitude() + ":" + locationGPS.getLongitude();
+            }
         }
         String[] tags =tagString.split(",");
-        Note createNode = new Note(title, text, tags, pinned);
+        Note createNode = new Note(title, text, tags, false, location)
         createNode.setColor(selectedColor);
         DataProvider.getInstance().addNoteToNotes(createNode);
+
 
         DataProvider.getInstance().save(this);
 

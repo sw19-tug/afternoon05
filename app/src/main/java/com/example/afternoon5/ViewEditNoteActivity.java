@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -67,12 +68,42 @@ public class ViewEditNoteActivity extends AppCompatActivity {
 
         final MultiAutoCompleteTextView tags = (MultiAutoCompleteTextView) this.findViewById(R.id.editTagsTextView);
 
+        final TextView location = (TextView) this.findViewById(R.id.locationTextView);
+
+        if(objectToEdit.getLocation() != null)
+        {
+            if (!objectToEdit.getLocation().isEmpty()) {
+                location.setVisibility(View.VISIBLE);
+                String[] latlong = objectToEdit.getLocation().split(":");
+                location.setText("Latitute: " + latlong[0] + "\nLongitude: " + latlong[1]);
+            } else {
+                location.setVisibility(View.GONE);
+            }
+        }
+        else
+        {
+            location.setVisibility(View.GONE);
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, DataProvider.getInstance().getAllTags());
 
         tags.setAdapter(adapter);
         tags.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-        tags.setText(objectToEdit.getTagsAsString());
+
+
+        String tagsAsString = objectToEdit.getTagsAsString();
+
+        if(tagsAsString != null && !tagsAsString.isEmpty())
+        {
+            tagsAsString = tagsAsString.replaceAll("#", " ");
+
+            if (tagsAsString.substring(0, 1).equals(" "))
+            {
+                tagsAsString = tagsAsString.substring(1);
+            }
+        }
+
+        tags.setText(tagsAsString);
 
         Button btn = this.findViewById(R.id.button_safe);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -112,11 +143,8 @@ public class ViewEditNoteActivity extends AppCompatActivity {
         DataProvider.getInstance().getNotes().get(position).setText(editNote.getText().toString());
         DataProvider.getInstance().getNotes().get(position).setTitle(Title.getText().toString());
         String tagString = tags.getText().toString();
-        tagString = tagString.replaceAll(" ", "");
-        if (tagString.endsWith(",")) {
-            tagString = tagString.substring(0, tagString.length() - 1);
-        }
-        String[] tagsArray = tagString.split(",");
+        tagString = tagString.replaceAll("#", " ");
+        String[] tagsArray = tagString.split(" ");
 
 
         DataProvider.getInstance().getNotes().get(position).setTags(tagsArray);

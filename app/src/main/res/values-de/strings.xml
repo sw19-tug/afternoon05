@@ -7,11 +7,14 @@
     <string name="alphabetical">Alphabetisch</string>
     <string name="creation_date">Erstellungsdatum</string>
     <string name="storting_menue">Sortieren</string>
+    <string name="add_geo_tag">Geo Tag hinzufügen     </string>
     <string name="import_menu">importieren</string>
     <string name="night_mode">Nachtmodus</string>
     <string name="pinned">Favorit</string>
     <string name="share_icon" />
     <string name="change_color">Farbe verändern</string>
+
+    <string name="search_title">Suchen</string>
 
     <string-array name="sort_options">
         <item>Sortieren nach Titel</item>

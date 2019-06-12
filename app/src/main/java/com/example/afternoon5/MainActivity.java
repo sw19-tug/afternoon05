@@ -17,6 +17,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,7 +52,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private list_adapter adapter;
 
 
@@ -71,6 +72,12 @@ public class MainActivity extends AppCompatActivity {
 
         MenuItem checkable_nightmode = menu.findItem(R.id.action_nightmode_toggle);
         checkable_nightmode.setChecked(getNightModefromPrefs());
+
+
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+
         return true;
     }
 
@@ -386,4 +393,15 @@ public class MainActivity extends AppCompatActivity {
         return value;
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        adapter.filter(s);
+        ((ListView) findViewById(R.id.node_list)).invalidateViews();
+        return true;
+    }
 }

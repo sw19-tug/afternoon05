@@ -19,6 +19,8 @@ public class Note {
     private Date creation_date;
     private ArrayList<String> tags;
 
+    private String location;
+
     public Note(String title, String text, boolean pinned, Date created) {
         this.title = title;
         this.text = text;
@@ -37,6 +39,15 @@ public class Note {
         this.tags = removeDuplicates(new ArrayList<>(Arrays.asList(tags)));
         this.pinned = pinned_1;
         this.creation_date = new Date();
+    }
+
+    public Note(String title, String text, String[] tags, boolean pinned_1, String location) {
+        this.title = title;
+        this.text = text;
+        this.tags = removeDuplicates(new ArrayList<>(Arrays.asList(tags)));
+        this.pinned = pinned_1;
+        this.creation_date = new Date();
+        this.location = location;
     }
 
 
@@ -58,6 +69,13 @@ public class Note {
 
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public String getTitle() {
         return title;
@@ -88,7 +106,9 @@ public class Note {
         String tagsAsString = "";
         for (String s : tags)
         {
-                   tagsAsString = tagsAsString + s + ", ";
+
+
+            tagsAsString =  tagsAsString + "#" + s;
         }
         return tagsAsString;
     }

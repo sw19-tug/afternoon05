@@ -122,8 +122,7 @@ public class CreateNoteActivity extends AppCompatActivity {
        
         tagString = tagString.replaceAll("#", " ");
 
-        String[] tags = tagString.split(" ");
-      
+
 
         Switch onOffSwitch = (Switch)  findViewById(R.id.geoTagSwitch);
         String location ="";
@@ -136,7 +135,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             }
         }
         String[] tags =tagString.split(",");
-        Note createNode = new Note(title, text, tags, false, location)
+        Note createNode = new Note(title, text, tags, false, location);
         createNode.setColor(selectedColor);
         DataProvider.getInstance().addNoteToNotes(createNode);
 

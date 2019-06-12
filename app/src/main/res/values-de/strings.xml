@@ -7,6 +7,7 @@
     <string name="alphabetical">Alphabetisch</string>
     <string name="creation_date">Erstellungsdatum</string>
     <string name="storting_menue">Sortieren</string>
+    <string name="add_geo_tag">Geo Tag hinzufügen     </string>
     <string name="import_menu">importieren</string>
     <string name="night_mode">Nachtmodus</string>
 

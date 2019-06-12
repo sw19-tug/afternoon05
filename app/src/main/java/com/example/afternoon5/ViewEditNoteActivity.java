@@ -63,6 +63,22 @@ public class ViewEditNoteActivity extends AppCompatActivity {
 
         final MultiAutoCompleteTextView tags = (MultiAutoCompleteTextView) this.findViewById(R.id.editTagsTextView);
 
+        final TextView location = (TextView) this.findViewById(R.id.locationTextView);
+
+        if(objectToEdit.getLocation() != null)
+        {
+            if (!objectToEdit.getLocation().isEmpty()) {
+                location.setVisibility(View.VISIBLE);
+                String[] latlong = objectToEdit.getLocation().split(":");
+                location.setText("Latitute: " + latlong[0] + "\nLongitude: " + latlong[1]);
+            } else {
+                location.setVisibility(View.GONE);
+            }
+        }
+        else
+        {
+            location.setVisibility(View.GONE);
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, DataProvider.getInstance().getAllTags());
 

@@ -4,7 +4,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -92,6 +95,8 @@ public class ViewEditNoteActivity extends AppCompatActivity {
             title_bar.setOnClickListener(v -> this.startActivity(mainIntent));
             act_bar.setCustomView(toolbarView);
         }
+        ConstraintLayout NoteElement = (ConstraintLayout)findViewById(R.id.note_color);
+        NoteElement.setBackgroundTintList(ColorStateList.valueOf(objectToEdit.getColor()));
 
     }
 
@@ -137,13 +142,17 @@ public class ViewEditNoteActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.action_change_color){
             final ColorPicker cp = new ColorPicker(ViewEditNoteActivity.this);
+            cp.enableAutoClose();
             cp.setCallback(new ColorPickerCallback() {
                 @Override
                 public void onColorChosen(int color) {
                     int selected_color = cp.getColor();
+                    objectToEdit.setColor(cp.getColor());
+                    ConstraintLayout NoteElement = (ConstraintLayout)findViewById(R.id.note_color);
+                    NoteElement.setBackgroundTintList(ColorStateList.valueOf(cp.getColor()));
                 }
             });
-
+            cp.show();
         }
 
 

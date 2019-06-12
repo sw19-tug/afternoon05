@@ -82,7 +82,8 @@ public class Note {
         String tagsAsString = "";
         for (String s : tags)
         {
-            tagsAsString = tagsAsString + s + ", ";
+
+            tagsAsString =  tagsAsString + "#" + s;
         }
         return tagsAsString;
     }

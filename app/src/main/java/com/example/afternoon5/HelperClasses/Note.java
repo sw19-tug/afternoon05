@@ -1,5 +1,6 @@
 package com.example.afternoon5.HelperClasses;
 
+import android.graphics.Color;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -13,6 +14,7 @@ public class Note {
     private String title;
     private String text;
     private Boolean pinned;
+    private int color = Color.WHITE;
 
     private Date creation_date;
     private ArrayList<String> tags;
@@ -91,6 +93,10 @@ public class Note {
         this.text = text;
     }
 
+    public void setColor(int color) {this.color = color;}
+
+    public int getColor() { return color; }
+
     public ArrayList<String> getTags() {
         return tags;
     }
@@ -100,6 +106,7 @@ public class Note {
         String tagsAsString = "";
         for (String s : tags)
         {
+
 
             tagsAsString =  tagsAsString + "#" + s;
         }
@@ -119,8 +126,6 @@ public class Note {
         return tagsAsString;
     }
 
-
-
     public void setPinn(boolean pinned_1)
     {
         this.pinned = pinned_1;
@@ -129,9 +134,7 @@ public class Note {
     public boolean getPinn()
     {
         if(pinned == null)
-        {
             return false;
-        }
         return pinned;
     }
 

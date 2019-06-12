@@ -3,6 +3,10 @@ package com.example.afternoon5;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.DialogFragment;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -12,6 +16,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -22,16 +29,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.afternoon5.HelperClasses.Note;
+import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
+import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
 
 
 public class CreateNoteActivity extends AppCompatActivity {
+
+    int selectedColor = Color.WHITE;
 
     private Activity thisActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_note);
+
         this.thisActivity = this;
 
 
@@ -96,8 +108,6 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     public void createNote(View view) {
 
-
-
         String title = ((EditText)findViewById(R.id.editTitle)).getText().toString();
         String text = ((EditText)findViewById(R.id.editText)).getText().toString();
         String tagString = ((MultiAutoCompleteTextView)findViewById(R.id.tagsTextView)).getText().toString();
@@ -125,9 +135,10 @@ public class CreateNoteActivity extends AppCompatActivity {
                 location = locationGPS.getLatitude() + ":" + locationGPS.getLongitude();
             }
         }
-
-
-        DataProvider.getInstance().addNoteToNotes(new Note(title, text, tags, false, location));
+        String[] tags =tagString.split(",");
+        Note createNode = new Note(title, text, tags, false, location)
+        createNode.setColor(selectedColor);
+        DataProvider.getInstance().addNoteToNotes(createNode);
 
 
         DataProvider.getInstance().save(this);
@@ -141,5 +152,40 @@ public class CreateNoteActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.create_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.action_change_color){
+            final ColorPicker cp = new ColorPicker(CreateNoteActivity.this,
+                    Color.alpha(selectedColor),
+                    Color.red(selectedColor),
+                    Color.green(selectedColor),
+                    Color.blue(selectedColor));
+            cp.enableAutoClose();
+            cp.setCallback(new ColorPickerCallback() {
+                @Override
+                public void onColorChosen(int color) {
+                    selectedColor = cp.getColor();
+                    ConstraintLayout NoteElement = (ConstraintLayout)findViewById(R.id.note_color);
+                    NoteElement.setBackgroundTintList(ColorStateList.valueOf(cp.getColor()));
+                }
+            });
+            cp.show();
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 }

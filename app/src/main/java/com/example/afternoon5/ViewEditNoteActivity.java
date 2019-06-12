@@ -4,7 +4,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -22,11 +25,13 @@ import android.widget.TextView;
 
 
 import com.example.afternoon5.HelperClasses.Note;
+import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
+import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
 import java.util.ArrayList;
 
 public class ViewEditNoteActivity extends AppCompatActivity {
-    private static final String EXTRA_MESSAGE ="extra";
+    private static final String EXTRA_MESSAGE = "extra";
     private static Note objectToEdit;
     private int position;
 
@@ -121,6 +126,8 @@ public class ViewEditNoteActivity extends AppCompatActivity {
             title_bar.setOnClickListener(v -> this.startActivity(mainIntent));
             act_bar.setCustomView(toolbarView);
         }
+        ConstraintLayout NoteElement = (ConstraintLayout)findViewById(R.id.note_color);
+        NoteElement.setBackgroundTintList(ColorStateList.valueOf(objectToEdit.getColor()));
 
     }
 
@@ -129,8 +136,7 @@ public class ViewEditNoteActivity extends AppCompatActivity {
         safeAndCallMainActivity();
     }
 
-    private void safeAndCallMainActivity()
-    {
+    private void safeAndCallMainActivity() {
         final TextView editNote = (TextView) this.findViewById(R.id.editNote);
         final TextView Title = (TextView) this.findViewById(R.id.Title);
         final MultiAutoCompleteTextView tags = (MultiAutoCompleteTextView) this.findViewById(R.id.editTagsTextView);
@@ -162,7 +168,27 @@ public class ViewEditNoteActivity extends AppCompatActivity {
             deleteNoteDialogFragment.show(getSupportFragmentManager(), "DeleteNoteDialogFragment");
 
             return true;
+        } else if (id == R.id.action_change_color){
+            int current_color = objectToEdit.getColor();
+            final ColorPicker cp = new ColorPicker(ViewEditNoteActivity.this,
+                    Color.alpha(current_color),
+                    Color.red(current_color),
+                    Color.green(current_color),
+                    Color.blue(current_color));
+
+            cp.enableAutoClose();
+            cp.setCallback(new ColorPickerCallback() {
+                @Override
+                public void onColorChosen(int color) {
+                    int selected_color = cp.getColor();
+                    objectToEdit.setColor(cp.getColor());
+                    ConstraintLayout NoteElement = (ConstraintLayout)findViewById(R.id.note_color);
+                    NoteElement.setBackgroundTintList(ColorStateList.valueOf(cp.getColor()));
+                }
+            });
+            cp.show();
         }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -176,7 +202,7 @@ public class ViewEditNoteActivity extends AppCompatActivity {
                     .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int id) {
                             // FIRE ZE MISSILES!
-                            Dialog dialog  = (Dialog) dialogInterface;
+                            Dialog dialog = (Dialog) dialogInterface;
                             Context context = dialog.getContext();
                             DataProvider.getInstance().getNotes().remove(objectToEdit);
                             DataProvider.getInstance().save(context);

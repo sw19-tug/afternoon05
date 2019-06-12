@@ -108,7 +108,11 @@ public class CreateNoteActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_change_color){
-            final ColorPicker cp = new ColorPicker(CreateNoteActivity.this);
+            final ColorPicker cp = new ColorPicker(CreateNoteActivity.this,
+                    Color.alpha(selectedColor),
+                    Color.red(selectedColor),
+                    Color.green(selectedColor),
+                    Color.blue(selectedColor));
             cp.enableAutoClose();
             cp.setCallback(new ColorPickerCallback() {
                 @Override

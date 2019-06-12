@@ -141,7 +141,13 @@ public class ViewEditNoteActivity extends AppCompatActivity {
 
             return true;
         } else if (id == R.id.action_change_color){
-            final ColorPicker cp = new ColorPicker(ViewEditNoteActivity.this);
+            int current_color = objectToEdit.getColor();
+            final ColorPicker cp = new ColorPicker(ViewEditNoteActivity.this,
+                    Color.alpha(current_color),
+                    Color.red(current_color),
+                    Color.green(current_color),
+                    Color.blue(current_color));
+
             cp.enableAutoClose();
             cp.setCallback(new ColorPickerCallback() {
                 @Override

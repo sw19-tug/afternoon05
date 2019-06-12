@@ -127,8 +127,6 @@ public class Note {
 
     public boolean getPinn()
     {
-        if(pinned == null)
-            return false;
         return pinned;
     }
 

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.content.pm.PackageManager;
@@ -43,7 +44,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_note);
 
         this.thisActivity = this;
-
+        selectedColor = getResources().getColor(R.color.colorNoteBackground,getTheme());
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, DataProvider.getInstance().getAllTags());

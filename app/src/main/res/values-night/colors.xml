@@ -4,6 +4,5 @@
     <color name="colorSecondary">#5392ff</color>
     <color name="colorPrimaryDark">#0b275c</color>
     <color name="colorAccent">#5392ff</color>
-    <color name="colorNoteBackground">#26FFFFFF</color>
     <color name="colorBackground">#121212</color>
 </resources>

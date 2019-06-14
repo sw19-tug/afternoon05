@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.DialogFragment;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -15,7 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,12 +31,12 @@ import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
 
-
 public class CreateNoteActivity extends AppCompatActivity {
 
     int selectedColor = Color.WHITE;
 
     private Activity thisActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,36 +68,36 @@ public class CreateNoteActivity extends AppCompatActivity {
             act_bar.setCustomView(toolbarView);
         }
 
-        Switch onOffSwitch = (Switch)  findViewById(R.id.geoTagSwitch);
+        Switch onOffSwitch = (Switch) findViewById(R.id.geoTagSwitch);
         onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-               if(isChecked)
-               {
-                   if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                           == PackageManager.PERMISSION_GRANTED) {
+                if (isChecked) {
+                    if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
 
-                   } else {
+                    } else {
 
-                       ActivityCompat.requestPermissions(thisActivity,
-                               new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                               200);
-                   }
-               }
+                        ActivityCompat.requestPermissions(thisActivity,
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                200);
+                    }
+                }
 
             }
 
         });
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case 200: {
-                if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Switch onOffSwitch = (Switch)  findViewById(R.id.geoTagSwitch);
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Switch onOffSwitch = (Switch) findViewById(R.id.geoTagSwitch);
                     onOffSwitch.setChecked(false);
                 }
             }
@@ -108,33 +106,34 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     public void createNote(View view) {
 
-        String title = ((EditText)findViewById(R.id.editTitle)).getText().toString();
-        String text = ((EditText)findViewById(R.id.editText)).getText().toString();
-        String tagString = ((MultiAutoCompleteTextView)findViewById(R.id.tagsTextView)).getText().toString();
+        String title = ((EditText) findViewById(R.id.editTitle)).getText().toString();
+        String text = ((EditText) findViewById(R.id.editText)).getText().toString();
+        String tagString = ((MultiAutoCompleteTextView) findViewById(R.id.tagsTextView)).getText().toString();
 
 
-        if(title.isEmpty() || text.isEmpty())
-        {
+        if (title.isEmpty() || text.isEmpty()) {
             Toast toast = Toast.makeText(this, "Title or Text can't be empty", Toast.LENGTH_LONG);
             toast.show();
             return;
         }
-       
-        tagString = tagString.replaceAll("#", " ");
+
+        tagString = tagString.replaceAll("(\\s+[#]?)|(\\s*[,]\\s*)|#", ",");
 
 
-
-        Switch onOffSwitch = (Switch)  findViewById(R.id.geoTagSwitch);
-        String location ="";
+        Switch onOffSwitch = (Switch) findViewById(R.id.geoTagSwitch);
+        String location = "";
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            if(onOffSwitch.isChecked()) {
+            if (onOffSwitch.isChecked()) {
                 LocationManager locationManager = (LocationManager) getSystemService(getApplicationContext().LOCATION_SERVICE);
                 Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 location = locationGPS.getLatitude() + ":" + locationGPS.getLongitude();
             }
         }
-        String[] tags =tagString.split(",");
+
+        String[] tags = tagString.matches(".*\\S+.*") ? tagString.split(",") : new String[0];
+
+
         Note createNode = new Note(title, text, tags, false, location);
         createNode.setColor(selectedColor);
         DataProvider.getInstance().addNoteToNotes(createNode);
@@ -152,6 +151,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -166,7 +166,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.action_change_color){
+        if (id == R.id.action_change_color) {
             final ColorPicker cp = new ColorPicker(CreateNoteActivity.this,
                     Color.alpha(selectedColor),
                     Color.red(selectedColor),
@@ -177,7 +177,7 @@ public class CreateNoteActivity extends AppCompatActivity {
                 @Override
                 public void onColorChosen(int color) {
                     selectedColor = cp.getColor();
-                    ConstraintLayout NoteElement = (ConstraintLayout)findViewById(R.id.note_color);
+                    ConstraintLayout NoteElement = (ConstraintLayout) findViewById(R.id.note_color);
                     NoteElement.setBackgroundTintList(ColorStateList.valueOf(cp.getColor()));
                 }
             });

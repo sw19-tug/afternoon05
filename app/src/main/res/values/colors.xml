@@ -4,6 +4,6 @@
     <color name="colorSecondary">#FF9800</color>
     <color name="colorPrimaryDark">#73ACF6</color>
     <color name="colorAccent">#FF9800</color>
-    <color name="colorNoteBackground">#FFF</color>
+    <color name="colorNoteBackground">#26FFFFFF</color>
     <color name="colorBackground">#d9d9db</color>
 </resources>

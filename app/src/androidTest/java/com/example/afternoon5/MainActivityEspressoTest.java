@@ -22,7 +22,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
+import java.sql.Date;
+import java.sql.Time;
+import java.util.ArrayList;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -44,6 +47,10 @@ public class MainActivityEspressoTest {
 
     @Test
     public void testListVisible() {
+        DataProvider.getInstance().setNotes(new ArrayList<>());
+        final String TITLE = "onenode";
+        final String TEXT = "node";
+        NoteSortingEspressoTest.addTestNotes(TITLE, TEXT);
         onView(withId(R.id.node_list)).check(matches(isDisplayed()));
     }
 
@@ -56,19 +63,19 @@ public class MainActivityEspressoTest {
     public void testListContent() throws Throwable {
         final String TITLE = "veryUniqueTestingStringOne";
         final String TEXT = "veryUniqueTestingStringTwo";
-        // When.
+        final boolean PIN = false;
+        String[] tags = {};
+
         activityTestRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //activityTestRule.getActivity().addListElement(new note_obj(TITLE, TEXT));
-                DataProvider.getInstance().addNoteToNotes(new Note(TITLE, TEXT));
+                DataProvider.getInstance().addNoteToNotes(new Note(TITLE, TEXT, tags, PIN));
                 activityTestRule.getActivity().refreshList();
 
             }
         });
         
 
-        //Thread.sleep(10000);
         onView(withText(TITLE)).check(matches(isDisplayed()));
         onView(withText(TEXT)).check(matches(isDisplayed()));
 

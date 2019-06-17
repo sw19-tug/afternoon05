@@ -82,7 +82,7 @@ public class CreateTagTest {
                                         0),
                                 2),
                         isDisplayed()));
-        appCompatMultiAutoCompleteTextView.perform(replaceText("test, hello"), closeSoftKeyboard());
+        appCompatMultiAutoCompleteTextView.perform(replaceText("test hello"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.SaveNoteButton), withText("Create Note"),
@@ -96,7 +96,7 @@ public class CreateTagTest {
 
         ViewInteraction textView = onView(withId(R.id.note_tags));
 
-        textView.check(matches(withText("test, hello, ")));
+        textView.check(matches(withText("#test#hello")));
     }
 
     private static Matcher<View> childAtPosition(

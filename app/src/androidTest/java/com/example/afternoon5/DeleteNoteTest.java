@@ -16,6 +16,8 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -117,7 +119,7 @@ public class DeleteNoteTest {
         constraintLayout.perform(click());
 
         ViewInteraction actionMenuItemView = onView(
-                allOf(withId(R.id.action_delete), withContentDescription("Delete"),
+                allOf(withId(R.id.action_delete), withContentDescription(R.string.delete_icon),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.action_bar),
@@ -135,18 +137,9 @@ public class DeleteNoteTest {
                                 3)));
         appCompatButton2.perform(scrollTo(), click());
 
-        ViewInteraction listView = onView(
-                allOf(withId(R.id.node_list),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        listView.check(matches(isDisplayed()));
+
 
         assertEquals(0, DataProvider.getInstance().getNotes().size());
-
     }
 
     private static Matcher<View> childAtPosition(

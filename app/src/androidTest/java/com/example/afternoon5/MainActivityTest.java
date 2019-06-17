@@ -26,10 +26,9 @@ import static org.junit.Assert.*;
 public class MainActivityTest {
     @Test
     public void createNoteTest() {
-        // Context of the app under test.
+
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(appContext);
         SharedPreferences settings = appContext.getSharedPreferences("com.example.afternoon5", appContext.MODE_PRIVATE);
         Gson gson = new Gson();
         TypeToken<ArrayList<Note>> token = new TypeToken<ArrayList<Note>>() {

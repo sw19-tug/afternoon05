@@ -96,7 +96,7 @@ public class list_adapter extends BaseAdapter {
         public TextView note_title;
         public TextView note_text;
         public TextView note_tags;
-        public CheckBox checkBox2; //
+        public CheckBox checkBox2;
 
     }
 

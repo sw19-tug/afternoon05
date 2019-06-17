@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 public class LanguageTest {
     @Test
     public void checkDisplayedLanguage() {
-        // Context of the app under test.
+
         Context appContext = InstrumentationRegistry.getTargetContext();
         String stringToTest = appContext.getString(R.string.alphabetical);
         String testString = "";

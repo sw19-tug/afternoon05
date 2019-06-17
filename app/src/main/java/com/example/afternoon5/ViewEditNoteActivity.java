@@ -35,14 +35,6 @@ public class ViewEditNoteActivity extends AppCompatActivity {
     private static Note objectToEdit;
     private int position;
 
-/*    static void callIntentwithExtra(Context cx, Note object)
-    {
-        Intent intent = new Intent(cx, ViewEditNoteActivity.class);
-        //intent.putExtra(EXTRA_MESSAGE, object);
-        objectToEdit = object;
-        cx.startActivity(intent);
-    }*/
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -112,7 +104,7 @@ public class ViewEditNoteActivity extends AppCompatActivity {
             }
         });
 
-        //Go Back on Android Logo Label Click
+
         ActionBar act_bar = getSupportActionBar();
         if (act_bar != null) {
             act_bar.setDisplayShowTitleEnabled(false);
@@ -156,12 +148,10 @@ public class ViewEditNoteActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+
         if (id == R.id.action_delete) {
 
             DialogFragment deleteNoteDialogFragment = new DeleteNoteDialogFragment();
@@ -196,12 +186,12 @@ public class ViewEditNoteActivity extends AppCompatActivity {
     static public class DeleteNoteDialogFragment extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the Builder class for convenient dialog construction
+
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage("Do you want to delete this Note?")
                     .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int id) {
-                            // FIRE ZE MISSILES!
+
                             Dialog dialog = (Dialog) dialogInterface;
                             Context context = dialog.getContext();
                             DataProvider.getInstance().getNotes().remove(objectToEdit);
@@ -213,10 +203,10 @@ public class ViewEditNoteActivity extends AppCompatActivity {
                     })
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            // User cancelled the dialog
+
                         }
                     });
-            // Create the AlertDialog object and return it
+
             return builder.create();
         }
     }

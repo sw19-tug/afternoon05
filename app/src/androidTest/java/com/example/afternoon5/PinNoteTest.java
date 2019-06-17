@@ -71,8 +71,6 @@ public class PinNoteTest {
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("a"), closeSoftKeyboard());
 
-        //pressBack();
-
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.SaveNoteButton), withText("Create Note"),
                         childAtPosition(

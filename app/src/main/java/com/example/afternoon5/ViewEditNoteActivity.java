@@ -4,12 +4,16 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,11 +25,13 @@ import android.widget.TextView;
 
 
 import com.example.afternoon5.HelperClasses.Note;
+import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
+import com.pes.androidmaterialcolorpickerdialog.ColorPickerCallback;
 
 import java.util.ArrayList;
 
 public class ViewEditNoteActivity extends AppCompatActivity {
-    private static final String EXTRA_MESSAGE ="extra";
+    private static final String EXTRA_MESSAGE = "extra";
     private static Note objectToEdit;
     private int position;
 
@@ -62,12 +68,42 @@ public class ViewEditNoteActivity extends AppCompatActivity {
 
         final MultiAutoCompleteTextView tags = (MultiAutoCompleteTextView) this.findViewById(R.id.editTagsTextView);
 
+        final TextView location = (TextView) this.findViewById(R.id.locationTextView);
+
+        if(objectToEdit.getLocation() != null)
+        {
+            if (!objectToEdit.getLocation().isEmpty()) {
+                location.setVisibility(View.VISIBLE);
+                String[] latlong = objectToEdit.getLocation().split(":");
+                location.setText("Latitute: " + latlong[0] + "\nLongitude: " + latlong[1]);
+            } else {
+                location.setVisibility(View.GONE);
+            }
+        }
+        else
+        {
+            location.setVisibility(View.GONE);
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, DataProvider.getInstance().getAllTags());
 
         tags.setAdapter(adapter);
         tags.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-        tags.setText(objectToEdit.getTagsAsString());
+
+
+        String tagsAsString = objectToEdit.getTagsAsString();
+
+        if(tagsAsString != null && !tagsAsString.isEmpty())
+        {
+            tagsAsString = tagsAsString.replaceAll("#", " ");
+
+            if (tagsAsString.substring(0, 1).equals(" "))
+            {
+                tagsAsString = tagsAsString.substring(1);
+            }
+        }
+
+        tags.setText(tagsAsString);
 
         Button btn = this.findViewById(R.id.button_safe);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +111,24 @@ public class ViewEditNoteActivity extends AppCompatActivity {
                 safeAndCallMainActivity();
             }
         });
+
+        //Go Back on Android Logo Label Click
+        ActionBar act_bar = getSupportActionBar();
+        if (act_bar != null) {
+            act_bar.setDisplayShowTitleEnabled(false);
+            act_bar.setDisplayShowCustomEnabled(true);
+
+            View toolbarView = getLayoutInflater().inflate(R.layout.toolbar_custom, null);
+            TextView title_bar = toolbarView.findViewById(R.id.toolbar_title);
+
+            Intent mainIntent = new Intent(ViewEditNoteActivity.this, MainActivity.class);
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            title_bar.setOnClickListener(v -> this.startActivity(mainIntent));
+            act_bar.setCustomView(toolbarView);
+        }
+        ConstraintLayout NoteElement = (ConstraintLayout)findViewById(R.id.note_color);
+        NoteElement.setBackgroundTintList(ColorStateList.valueOf(objectToEdit.getColor()));
+
     }
 
     @Override
@@ -82,20 +136,15 @@ public class ViewEditNoteActivity extends AppCompatActivity {
         safeAndCallMainActivity();
     }
 
-    private void safeAndCallMainActivity()
-    {
+    private void safeAndCallMainActivity() {
         final TextView editNote = (TextView) this.findViewById(R.id.editNote);
         final TextView Title = (TextView) this.findViewById(R.id.Title);
         final MultiAutoCompleteTextView tags = (MultiAutoCompleteTextView) this.findViewById(R.id.editTagsTextView);
         DataProvider.getInstance().getNotes().get(position).setText(editNote.getText().toString());
         DataProvider.getInstance().getNotes().get(position).setTitle(Title.getText().toString());
         String tagString = tags.getText().toString();
-        tagString = tagString.replaceAll(" ", "");
-        if(tagString.endsWith(","))
-        {
-            tagString = tagString.substring(0, tagString.length()-1);
-        }
-        String[] tagsArray =tagString.split(",");
+        tagString = tagString.replaceAll("#", " ");
+        String[] tagsArray = tagString.split(" ");
 
 
         DataProvider.getInstance().getNotes().get(position).setTags(tagsArray);
@@ -119,7 +168,27 @@ public class ViewEditNoteActivity extends AppCompatActivity {
             deleteNoteDialogFragment.show(getSupportFragmentManager(), "DeleteNoteDialogFragment");
 
             return true;
+        } else if (id == R.id.action_change_color){
+            int current_color = objectToEdit.getColor();
+            final ColorPicker cp = new ColorPicker(ViewEditNoteActivity.this,
+                    Color.alpha(current_color),
+                    Color.red(current_color),
+                    Color.green(current_color),
+                    Color.blue(current_color));
+
+            cp.enableAutoClose();
+            cp.setCallback(new ColorPickerCallback() {
+                @Override
+                public void onColorChosen(int color) {
+                    int selected_color = cp.getColor();
+                    objectToEdit.setColor(cp.getColor());
+                    ConstraintLayout NoteElement = (ConstraintLayout)findViewById(R.id.note_color);
+                    NoteElement.setBackgroundTintList(ColorStateList.valueOf(cp.getColor()));
+                }
+            });
+            cp.show();
         }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -133,7 +202,7 @@ public class ViewEditNoteActivity extends AppCompatActivity {
                     .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int id) {
                             // FIRE ZE MISSILES!
-                            Dialog dialog  = (Dialog) dialogInterface;
+                            Dialog dialog = (Dialog) dialogInterface;
                             Context context = dialog.getContext();
                             DataProvider.getInstance().getNotes().remove(objectToEdit);
                             DataProvider.getInstance().save(context);

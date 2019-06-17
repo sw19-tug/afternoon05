@@ -10,6 +10,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+import java.util.Date;
+
+import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -29,14 +33,13 @@ public class InsideNoteActivityEspressoTest {
     public IntentsTestRule<MainActivity> activityTestRule = new IntentsTestRule<>(MainActivity.class);
 
 
-    public void createNewListElement(final String node_title, final String node_text) throws Throwable
-    {
+    public void createNewListElement(final String node_title, final String node_text, final boolean pinned) throws Throwable {
         //add new List element, set title and text of node of the new node
         activityTestRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 //activityTestRule.getActivity().addListElement(new Note(node_title, node_text));
-                DataProvider.getInstance().addNoteToNotes(new Note(node_title, node_text));
+                DataProvider.getInstance().addNoteToNotes(new Note(node_title, node_text, pinned, new Date()));
                 activityTestRule.getActivity().refreshList();
             }
         });
@@ -44,11 +47,13 @@ public class InsideNoteActivityEspressoTest {
 
     @Test
     public void testNodeContentAndClickableOnMainActivity() throws Throwable {
+        DataProvider.getInstance().setNotes(new ArrayList<>());
 
         final String node_title = "new_node_title_01";
         final String node_text = "new_node_text_01";
+        final boolean pinned = false;
 
-        createNewListElement(node_title, node_text);
+        createNewListElement(node_title, node_text, pinned);
 
         //Check if displayed on MainActivity
         onView(withText(node_title)).check(matches(isDisplayed()));
@@ -63,12 +68,14 @@ public class InsideNoteActivityEspressoTest {
 
     @Test
     public void testCheckContentAfterClickedNodeInMainActivity() throws Throwable {
+        DataProvider.getInstance().setNotes(new ArrayList<>());
         final String node_title = "new_node_title_02";
         final String node_text = "new_node_text_02";
+        final boolean pinned = false;
 
         //Activity: MainActivity
 
-        createNewListElement(node_title, node_text);
+        createNewListElement(node_title, node_text, pinned);
 
         //Click on the new Node to get into the InsideNodeView Activity, where you are able to see and edit the node
         onView(withText(node_title)).perform(click());
@@ -79,6 +86,7 @@ public class InsideNoteActivityEspressoTest {
         onView(withText(node_title)).check(matches(isDisplayed()));
         onView(withText(node_text)).check(matches(isDisplayed()));
 
+        closeSoftKeyboard();
         //Check if Safe Button showing and clickable
         onView(withId(R.id.button_safe)).check(matches(isDisplayed()));
         onView(withId(R.id.button_safe)).check(matches(isClickable()));
@@ -87,13 +95,15 @@ public class InsideNoteActivityEspressoTest {
 
     @Test
     public void testEditNodeTitleCheckActivityAfterBack() throws Throwable {
+        DataProvider.getInstance().setNotes(new ArrayList<>());
 
         final String node_title = "new_node_title_03";
         final String node_text = "new_node_text_03";
+        final boolean pinned = false;
 
         //Activity: MainActivity
 
-        createNewListElement(node_title, node_text);
+        createNewListElement(node_title, node_text, pinned);
 
         //Click on the new Node to get into the InsideNodeView Activity, where you are able to see and edit the node
         onView(withText(node_title)).perform(click());

@@ -1,0 +1,66 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- "Mark Favorite", should appear as action button if possible -->
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share"
+        android:onClick="shareSelectedNotes"
+        android:title="@string/share_icon"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_export"
+        android:icon="@drawable/ic_archive_white_24dp"
+        android:onClick="exportSelectedNotes"
+        android:title="@string/export_icon"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_cancel"
+        android:icon="@drawable/ic_close_black_24dp"
+        android:onClick="closeExport"
+        android:title="@android:string/cancel"
+        android:visible="false"
+        app:showAsAction="always" />
+
+    <item android:id="@+id/checkable_sort"
+        android:title="@string/storting_menue" >
+        <menu xmlns:android="http://schemas.android.com/apk/res/android">
+            <group android:checkableBehavior="single">
+                <item android:id="@+id/sort_alphabetical"
+                    android:title="@string/alphabetical" />
+                <item android:id="@+id/sort_creation_date"
+                    android:title="@string/creation_date" />
+                <item android:id="@+id/sort_pinned"
+                    android:title="@string/pinned" />
+            </group>
+        </menu>
+
+    </item>
+
+
+
+    <item android:id="@+id/search"
+        android:title="@string/search_title"
+        android:icon="@drawable/ic_search_white_24dp"
+        app:showAsAction="always|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
+
+    <item
+        android:id="@+id/action_nightmode_toggle"
+        android:checkable="true"
+        android:onClick="nightmodeSelected"
+        android:title="@string/night_mode"
+        />
+    <item
+        android:id="@+id/action_import"
+        android:onClick="importNote"
+        android:title="@string/import_menu"
+        />
+
+
+    <!-- Settings, should always be in the overflow -->
+
+
+</menu>

@@ -65,11 +65,10 @@ public class MainActivityEspressoTest {
         final String TEXT = "veryUniqueTestingStringTwo";
         final boolean PIN = false;
         String[] tags = {};
-        // When.
+
         activityTestRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //activityTestRule.getActivity().addListElement(new note_obj(TITLE, TEXT));
                 DataProvider.getInstance().addNoteToNotes(new Note(TITLE, TEXT, tags, PIN));
                 activityTestRule.getActivity().refreshList();
 
@@ -77,7 +76,6 @@ public class MainActivityEspressoTest {
         });
         
 
-        //Thread.sleep(10000);
         onView(withText(TITLE)).check(matches(isDisplayed()));
         onView(withText(TEXT)).check(matches(isDisplayed()));
 

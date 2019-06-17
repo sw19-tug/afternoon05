@@ -34,11 +34,11 @@ public class InsideNoteActivityEspressoTest {
 
 
     public void createNewListElement(final String node_title, final String node_text, final boolean pinned) throws Throwable {
-        //add new List element, set title and text of node of the new node
+
         activityTestRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //activityTestRule.getActivity().addListElement(new Note(node_title, node_text));
+
                 DataProvider.getInstance().addNoteToNotes(new Note(node_title, node_text, pinned, new Date()));
                 activityTestRule.getActivity().refreshList();
             }
@@ -55,14 +55,14 @@ public class InsideNoteActivityEspressoTest {
 
         createNewListElement(node_title, node_text, pinned);
 
-        //Check if displayed on MainActivity
+
         onView(withText(node_title)).check(matches(isDisplayed()));
         onView(withText(node_text)).check(matches(isDisplayed()));
 
-        //Check if Node Clickable
+
         onView(withText(node_title)).perform(click());
 
-        //Check if Activity Changed after Click on Node Title
+
         intended(hasComponent(ViewEditNoteActivity.class.getName()));
     }
 
@@ -73,21 +73,16 @@ public class InsideNoteActivityEspressoTest {
         final String node_text = "new_node_text_02";
         final boolean pinned = false;
 
-        //Activity: MainActivity
 
         createNewListElement(node_title, node_text, pinned);
 
-        //Click on the new Node to get into the InsideNodeView Activity, where you are able to see and edit the node
         onView(withText(node_title)).perform(click());
 
-        //Activity: InsideNodeActivity
-
-        //Check in new opened Activity, if the title and test is the same as in the Activity before
         onView(withText(node_title)).check(matches(isDisplayed()));
         onView(withText(node_text)).check(matches(isDisplayed()));
 
         closeSoftKeyboard();
-        //Check if Safe Button showing and clickable
+
         onView(withId(R.id.button_safe)).check(matches(isDisplayed()));
         onView(withId(R.id.button_safe)).check(matches(isClickable()));
     }
@@ -101,24 +96,23 @@ public class InsideNoteActivityEspressoTest {
         final String node_text = "new_node_text_03";
         final boolean pinned = false;
 
-        //Activity: MainActivity
+
 
         createNewListElement(node_title, node_text, pinned);
 
-        //Click on the new Node to get into the InsideNodeView Activity, where you are able to see and edit the node
         onView(withText(node_title)).perform(click());
 
-        //Activity: InsideNode
+
 
         final String node_title_new = "new_node_title_changed";
 
-        //Change Title of Node
+
         onView(withId(R.id.Title)).perform(replaceText(node_title_new));
 
-        //Go Back to Activity Main
+
         pressBack();
 
-        //Check if new Title is displayed on Activity Main
+
         onView(withText(node_title_new)).check(matches(isDisplayed()));
     }
 

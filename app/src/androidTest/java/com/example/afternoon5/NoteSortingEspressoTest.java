@@ -88,8 +88,7 @@ public class NoteSortingEspressoTest {
         addTestNotes("C" + TITLE, "C" + TEXT);
         addTestNotes("B" + TITLE, "B" + TEXT);
         addTestNotes("A" + TITLE, "A" + TEXT);
-        //addTestNotes("E" + TITLE, "E" + TEXT);
-        //addTestNotes("D" + TITLE, "D" + TEXT);
+
     }
 
 

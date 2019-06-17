@@ -84,7 +84,7 @@ public class GeoTagTest {
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("b"), closeSoftKeyboard());
 
-        //pressBack();
+
 
         ViewInteraction switch_ = onView(
                 allOf(withId(R.id.geoTagSwitch),

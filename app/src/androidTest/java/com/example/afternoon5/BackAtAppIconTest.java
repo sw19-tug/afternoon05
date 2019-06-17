@@ -43,7 +43,7 @@ public class BackAtAppIconTest {
     @Test
     public void backAtAppIconTest() {
 
-        //Click on App logo in another activity
+
         ViewInteraction floatingActionButton = onView(
                 allOf(withId(R.id.createNoteButton),
                         childAtPosition(
@@ -55,7 +55,7 @@ public class BackAtAppIconTest {
         floatingActionButton.perform(click());
 
 
-        //Click on App Logo
+
         ViewInteraction appCompatTextView = onView(
                 allOf(withId(R.id.toolbar_title), withText("NOTE"),
                         childAtPosition(

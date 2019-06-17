@@ -53,7 +53,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         textView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
 
-        //Go Back on Android Logo Label Click
+
         ActionBar act_bar = getSupportActionBar();
         if (act_bar != null) {
             act_bar.setDisplayShowTitleEnabled(false);
@@ -162,9 +162,7 @@ public class CreateNoteActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         if (id == R.id.action_change_color) {
